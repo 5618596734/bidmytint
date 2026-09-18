@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BidMyTint | Compare Window Film Proposals</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      color: #14233b;
+      background: #ffffff;
+    }
+
+    header {
+      background: #0b1d35;
+      color: white;
+      padding: 20px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      color: #d8ad55;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 28px;
+      font-size: 15px;
+    }
+
+    .hero {
+      min-height: 610px;
+      display: flex;
+      align-items: center;
+      padding: 70px 7%;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(7,24,45,.94) 0%,
+          rgba(7,24,45,.82) 45%,
+          rgba(7,24,45,.30) 100%
+        ),
+        url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85');
+      background-size: cover;
+      background-position: center;
+      color: white;
+    }
+
+    .hero-content {
+      max-width: 650px;
+    }
+
+    .eyebrow {
+      color: #e2bb6a;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 58px;
+      line-height: 1.05;
+      margin-bottom: 22px;
+    }
+
+    .hero p {
+      font-size: 20px;
+      line-height: 1.6;
+      color: #e8edf4;
+      max-width: 590px;
+      margin-bottom: 34px;
+    }
+
+    .primary-button {
+      display: inline-block;
+      background: #d8ad55;
+      color: #0b1d35;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 17px 30px;
+      border-radius: 6px;
+      font-size: 17px;
+    }
+
+    .subtext {
+      margin-top: 17px;
+      font-size: 13px !important;
+      color: #cbd5e1 !important;
+    }
+
+    .how {
+      padding: 75px 7%;
+      text-align: center;
+    }
+
+    .how h2 {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .how-intro {
+      color: #64748b;
+      margin-bottom: 50px;
+      font-size: 17px;
+    }
+
+    .steps {
+      max-width: 1050px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 35px;
+    }
+
+    .step {
+      padding: 25px;
+    }
+
+    .number {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 18px;
+      background: #0b1d35;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .step h3 {
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .step p {
+      color: #64748b;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .trust {
+      background: #f5f7fa;
+      padding: 55px 7%;
+      text-align: center;
+    }
+
+    .trust h2 {
+      margin-bottom: 15px;
+      font-size: 30px;
+    }
+
+    .trust p {
+      max-width: 750px;
+      margin: auto;
+      color: #64748b;
+      line-height: 1.7;
+    }
+
+    footer {
+      background: #08172b;
+      color: #aebbc9;
+      padding: 28px 7%;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 750px) {
+      nav {
+        display: none;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+
+      .hero {
+        min-height: 560px;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">BidMy<span>Tint</span></div>
+
+  <nav>
+    <a href="#">How It Works</a>
+    <a href="#">For Contractors</a>
+    <a href="#">Sign In</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+
+    <div class="eyebrow">
+      Residential & Commercial Window Film
+    </div>
+
+    <h1>
+      One Project.<br>
+      Multiple Professional Proposals.
+    </h1>
+
+    <p>
+      Tell us about your window film project and compare proposals
+      from qualified professionals serving your area.
+    </p>
+
+    <a href="#" class="primary-button">
+      Get My Bids
+    </a>
+
+    <p class="subtext">
+      Free to submit • No obligation • Compare before you choose
+    </p>
+
+  </div>
+</section>
+
+<section class="how">
+
+  <h2>How BidMyTint Works</h2>
+
+  <p class="how-intro">
+    A simpler way to find the right window film professional.
+  </p>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="number">1</div>
+      <h3>Tell Us About Your Project</h3>
+      <p>
+        Upload photos, provide your ZIP code and tell us what
+        you want to accomplish. Measurements are optional.
+      </p>
+    </div>
+
+    <div class="step">
+      <div class="number">2</div>
+      <h3>Receive Professional Proposals</h3>
+      <p>
+        Qualified window film professionals can review your
+        project and submit private proposals.
+      </p>
+    </div>
+
+    <div class="step">
+      <div class="number">3</div>
+      <h3>Compare & Choose</h3>
+      <p>
+        Compare price, film, warranty and availability before
+        selecting the professional that's right for your project.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<section class="trust">
+  <h2>More Than Just a Price</h2>
+  <p>
+    BidMyTint helps you compare complete window film solutions —
+    including product information, performance, warranty and
+    installation details — so you can make an informed decision.
+  </p>
+</section>
+
+<footer>
+  © 2026 BidMyTint. All rights reserved.
+</footer>
+
+</body>
+</html>
