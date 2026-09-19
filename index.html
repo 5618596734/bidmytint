@@ -687,8 +687,25 @@ if(!consent){
 alert("Please accept the terms before submitting.");
 return;
 }
+let photoFiles = document.getElementById("photos").files;
+let uploadedPhotos = [];
+for (let i = 0; i < photoFiles.length; i++) {
+  let file = photoFiles[i];
+  let fileName = Date.now() + "-" + i + "-" + file.name;
 
-const { error } = await db
+  const { error: uploadError } = await db.storage
+    .from("project-photos")
+    .upload(fileName, file);
+
+  if (uploadError) {
+    console.error(uploadError);
+    alert("There was a problem uploading your photos. Please try again.");
+    return;
+  }
+
+  uploadedPhotos.push(fileName);
+}  
+  const { error } = await db
   .from('projects')
   .insert({
   property_type: document.getElementById("property").value,
@@ -702,7 +719,7 @@ existing_film: document.getElementById("existingFilm").value,
 removal_details: document.getElementById("removal").value,
 timing: document.getElementById("timing").value,
 notes: document.getElementById("notes").value,  
-  
+photos: uploadedPhotos.join(", "),
   
   
  
