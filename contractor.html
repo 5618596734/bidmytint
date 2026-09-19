@@ -211,46 +211,7 @@ footer {
     <p>Customer contact information remains private until a project is awarded.</p>
   </div>
 <div id="projectsList">
-  <div class="project-card">
-
-    <div class="project-top">
-      <div>
-        <div class="project-number">PROJECT #1001</div>
-        <h3>Residential Window Film Project</h3>
-        <div class="location">ZIP Code: 33324</div>
-      </div>
-
-      <div class="badge">OPEN FOR BIDS</div>
-    </div>
-
-    <div class="details">
-
-      <div>
-        <div class="detail-label">PROJECT GOAL</div>
-        <div class="detail-value">Heat Reduction / UV Protection</div>
-      </div>
-
-      <div>
-        <div class="detail-label">WINDOWS</div>
-        <div class="detail-value">11–20 Windows</div>
-      </div>
-
-      <div>
-        <div class="detail-label">TIMING</div>
-        <div class="detail-value">Within 30 Days</div>
-      </div>
-
-    </div>
-
-    <div class="card-bottom">
-      <div class="note">
-        Proposal prices are sealed. Contractors cannot see competing bids.
-      </div>
-
-      <button type="button">View Project</button>
-    </div>
-
-  </div>
+  
 
 </div>
 </main>
@@ -264,15 +225,74 @@ const SUPABASE_URL = 'https://pkdleiskrqxbouozmquo.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
   
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-async function loadProjects() {
-  const { data, error } = await db
-    .from('contractor_projects')
-    .select('*');
-
-  console.log(data, error);
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
 }
 
-loadProjects();  
+async function loadProjects() {
+  const projectsList = document.getElementById('projectsList');
+
+  const { data, error } = await db
+    .from('contractor_projects')
+    .select('*')
+    .eq('status', 'new')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(error);
+    projectsList.innerHTML = '<p>Unable to load projects right now.</p>';
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    projectsList.innerHTML = '<p>No projects are available right now.</p>';
+    return;
+  }
+
+  projectsList.innerHTML = data.map(project => `
+    <div class="project-card">
+      <div class="project-top">
+        <div>
+          <div class="project-number">PROJECT #${project.id}</div>
+          <h3>${escapeHtml(project.property_type || 'Window Film')} Project</h3>
+          <div class="location">ZIP Code: ${escapeHtml(project.zip_code || 'Not provided')}</div>
+        </div>
+        <div class="badge">OPEN FOR BIDS</div>
+      </div>
+
+      <div class="details">
+        <div>
+          <div class="detail-label">PROJECT GOAL</div>
+          <div class="detail-value">${escapeHtml(project.goals || 'Not provided')}</div>
+        </div>
+
+        <div>
+          <div class="detail-label">WINDOWS</div>
+          <div class="detail-value">${escapeHtml(project.window_count || 'Not provided')}</div>
+        </div>
+
+        <div>
+          <div class="detail-label">TIMING</div>
+          <div class="detail-value">${escapeHtml(project.timing || 'Not provided')}</div>
+        </div>
+      </div>
+
+      <div class="card-bottom">
+        <div class="note">
+          Proposal prices are sealed. Contractors cannot see competing bids.
+        </div>
+        <button type="button">View Project</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+loadProjects();
 </script>
 </body>
 </html>
