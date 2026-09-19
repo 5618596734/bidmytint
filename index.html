@@ -673,8 +673,7 @@ document.getElementById("summary").innerHTML=summary;
 showStep(3);
 }
 
-function submitProject(){
-
+async function submitProject(){
 let name=document.getElementById("name").value;
 let email=document.getElementById("email").value;
 let phone=document.getElementById("phone").value;
@@ -690,11 +689,33 @@ alert("Please accept the terms before submitting.");
 return;
 }
 
-alert("Your BidMyTint project is ready to submit! Next we'll connect this form to the database.");
+const { error } = await db
+  .from('projects')
+  .insert({
+    customer_name: name,
+    customer_email: email,
+    customer_phone: phone,
+    status: 'new'
+  });
+if (error) {
+  console.error(error);
+  alert("There was a problem submitting your project. Please try again.");
+  return;
+}
 
+alert("Success! Your BidMyTint project has been submitted.");
 }
 
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://pkdleiskrqxbouozmquo.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
 
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script
 </body>
 </html>
+
+
+
