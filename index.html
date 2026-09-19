@@ -695,8 +695,9 @@ for (let i = 0; i < photoFiles.length; i++) {
 
   const { error: uploadError } = await db.storage
     .from("project-photos")
-    .upload(fileName, file);
-
+    .upload(fileName, file, {
+  contentType: file.type || 'image/jpeg'
+});
   if (uploadError) {
     console.error(uploadError);
     alert("There was a problem uploading your photos. Please try again.");
