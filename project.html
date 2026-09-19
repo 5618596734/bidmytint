@@ -262,14 +262,55 @@ function showProposalForm() {
         <textarea id="proposalNotes" rows="5" placeholder="Additional proposal details"></textarea>
       </div>
 
-      <button type="button">Send Sealed Proposal</button>
-    </div>
+      <button type="button" onclick="submitProposal()">Send Sealed Proposal</button>
+      </div>
   `);
 
   document.getElementById('proposalForm').scrollIntoView({
     behavior: 'smooth'
   });
 }  
+async function submitProposal() {
+  const params = new URLSearchParams(window.location.search);
+  const projectId = params.get('id');
+
+  const price = document.getElementById('proposalPrice').value;
+  const manufacturer = document.getElementById('filmManufacturer').value;
+  const product = document.getElementById('filmProduct').value;
+  const warrantyValue = document.getElementById('warranty').value;
+  const availabilityValue = document.getElementById('availability').value;
+  const notes = document.getElementById('proposalNotes').value;
+
+  if (!price || Number(price) <= 0) {
+    alert('Please enter a valid proposal price.');
+    return;
+  }
+
+  const { error } = await db
+    .from('proposals')
+    .insert({
+      project_id: Number(projectId),
+      proposal_price: Number(price),
+      film_manufacturer: manufacturer,
+      film_product: product,
+      warranty: warrantyValue,
+      availability: availabilityValue,
+      proposal_notes: notes
+    });
+
+  if (error) {
+    console.error(error);
+    alert('There was a problem submitting your proposal. Please try again.');
+    return;
+  }
+
+  alert('Your sealed proposal has been submitted successfully.');
+
+  const form = document.getElementById('proposalForm');
+  if (form) {
+    form.remove();
+  }
+}
   loadProject();  
 </script>
 </body>
