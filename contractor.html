@@ -210,7 +210,7 @@ footer {
     <h2>Available Projects</h2>
     <p>Customer contact information remains private until a project is awarded.</p>
   </div>
-
+<div id="projectsList">
   <div class="project-card">
 
     <div class="project-top">
@@ -252,11 +252,26 @@ footer {
 
   </div>
 
+</div>
 </main>
 
 <footer>
   © BidMyTint — Architectural Window Film Marketplace
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = '...';
+const SUPABASE_KEY = '...';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+async function loadProjects() {
+  const { data, error } = await db
+    .from('contractor_projects')
+    .select('*');
 
+  console.log(data, error);
+}
+
+loadProjects();  
+</script>
 </body>
 </html>
