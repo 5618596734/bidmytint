@@ -678,8 +678,7 @@ let name=document.getElementById("name").value;
 let email=document.getElementById("email").value;
 let phone=document.getElementById("phone").value;
 let consent=document.getElementById("consent").checked;
-
-if(!name || !email || !phone){
+let selectedGoals = Array.from(document.querySelectorAll('input[name="goal"]:checked')).map(item => item.value).join(", ");if(!name || !email || !phone){
 alert("Please enter your name, email and mobile number.");
 return;
 }
@@ -692,12 +691,23 @@ return;
 const { error } = await db
   .from('projects')
   .insert({
-    customer_name: name,
-    customer_email: email,
-    customer_phone: phone,
-    status: 'new'
-  });
-if (error) {
+  property_type: document.getElementById("property").value,
+  zip_code: document.getElementById("zip").value,
+  goals: selectedGoals,
+  window_count: document.getElementById("windows").value,
+  high_windows: document.getElementById("highWindows").value,
+  window_height: document.getElementById("height").value,
+  measurements: document.getElementById("measurements").value,
+  existing_film: document.getElementById("existingFilm").value,
+  removal_details: document.getElementById("removal").value,
+  timing: document.getElementById("timing").value,
+  notes: document.getElementById("notes").value,
+  customer_name: name,
+  customer_email: email,
+  customer_phone: phone,
+  status: 'new'
+});
+  if (error) {
   console.error(error);
   alert("There was a problem submitting your project. Please try again.");
   return;
