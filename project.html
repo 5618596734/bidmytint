@@ -221,11 +221,56 @@ async function loadProject() {
       <div class="detail-value">${escapeHtml(data.notes || 'None')}</div>
     </div>
 
-    <button type="button">Submit Sealed Proposal</button>
-  `;
+    <button type="button" onclick="showProposalForm()">Submit Sealed Proposal</button>
+    `;
 }
 
-loadProject();  
+function showProposalForm() {
+  const projectDetails = document.getElementById('projectDetails');
+
+  projectDetails.insertAdjacentHTML('beforeend', `
+    <div id="proposalForm" style="margin-top:30px; border-top:2px solid #eceef1; padding-top:25px;">
+      <h2>Submit Your Sealed Proposal</h2>
+
+      <div class="detail-row">
+        <div class="detail-label">Proposal Price</div>
+        <input id="proposalPrice" type="number" placeholder="$0.00">
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Film Manufacturer</div>
+        <input id="filmManufacturer" type="text" placeholder="Example: 3M, Llumar, Solar Gard">
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Film / Product</div>
+        <input id="filmProduct" type="text" placeholder="Film name or product series">
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Warranty</div>
+        <input id="warranty" type="text" placeholder="Example: Manufacturer lifetime warranty">
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Availability</div>
+        <input id="availability" type="text" placeholder="Example: Can start within 7 days">
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Proposal Notes</div>
+        <textarea id="proposalNotes" rows="5" placeholder="Additional proposal details"></textarea>
+      </div>
+
+      <button type="button">Send Sealed Proposal</button>
+    </div>
+  `);
+
+  document.getElementById('proposalForm').scrollIntoView({
+    behavior: 'smooth'
+  });
+}  
+  loadProject();  
 </script>
 </body>
   
