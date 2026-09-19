@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6f8;
+  color: #142033;
+}
+
+header {
+  background: #07182d;
+  color: white;
+  padding: 20px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.logo span {
+  color: #d6a84b;
+}
+
+.header-right {
+  font-size: 14px;
+  color: #d8dee7;
+}
+
+.hero {
+  background: #07182d;
+  color: white;
+  padding: 45px 7% 55px;
+}
+
+.hero h1 {
+  margin: 0 0 10px;
+  font-size: 38px;
+}
+
+.hero p {
+  margin: 0;
+  color: #cbd3df;
+}
+
+.container {
+  width: 86%;
+  max-width: 1000px;
+  margin: 40px auto;
+}
+
+.project-details {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.06);
+  border: 1px solid #e7e9ed;
+}
+
+.detail-row {
+  padding: 17px 0;
+  border-bottom: 1px solid #eceef1;
+}
+
+.detail-label {
+  font-size: 12px;
+  color: #8a93a2;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.detail-value {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #07182d;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+button {
+  margin-top: 25px;
+  border: 0;
+  background: #d6a84b;
+  color: #07182d;
+  font-weight: 700;
+  padding: 14px 22px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+</style>  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Details | BidMyTint</title>
+</head>
+
+<body>
+<header>
+  <div class="logo">BidMy<span>Tint</span></div>
+  <div class="header-right">Contractor Portal</div>
+</header>
+
+<section class="hero">
+  <h1>Project Details</h1>
+  <p>Review the project information before submitting a sealed proposal.</p>
+</section>
+
+<main class="container">
+  <a class="back-link" href="contractor.html">← Back to Project Opportunities</a>
+
+  <div id="projectDetails" class="project-details">
+    <p>Loading project details...</p>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</body>
+</html>
