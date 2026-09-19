@@ -286,8 +286,8 @@ async function loadProjects() {
         <div class="note">
           Proposal prices are sealed. Contractors cannot see competing bids.
         </div>
-        <button type="button">View Project</button>
-      </div>
+        <button type="button" onclick="window.location.href='project.html?id=${project.id}'">View Project</button>
+        </div>
     </div>
   `).join('');
 }
