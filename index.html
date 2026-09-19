@@ -693,11 +693,13 @@ for (let i = 0; i < photoFiles.length; i++) {
   let file = photoFiles[i];
   let fileName = Date.now() + "-" + i + "-" + file.name;
 
-  const { error: uploadError } = await db.storage
-    .from("project-photos")
-    .upload(fileName, file, {
-  contentType: file.type || 'image/jpeg'
-});
+const fileData = await file.arrayBuffer();
+
+const { error: uploadError } = await db.storage
+  .from("project-photos")
+  .upload(fileName, fileData, {
+    contentType: file.type || 'image/jpeg'
+  });
   if (uploadError) {
     console.error(uploadError);
     alert("There was a problem uploading your photos. Please try again.");
