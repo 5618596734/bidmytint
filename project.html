@@ -129,6 +129,103 @@ button {
 const SUPABASE_URL = 'https://pkdleiskrqxbouozmquo.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+async function loadProject() {
+  const projectDetails = document.getElementById('projectDetails');
+  const params = new URLSearchParams(window.location.search);
+  const projectId = params.get('id');
+
+  if (!projectId) {
+    projectDetails.innerHTML = '<p>Project not found.</p>';
+    return;
+  }
+
+  const { data, error } = await db
+    .from('contractor_projects')
+    .select('*')
+    .eq('id', projectId)
+    .single();
+
+  if (error || !data) {
+    console.error(error);
+    projectDetails.innerHTML = '<p>Unable to load this project.</p>';
+    return;
+  }
+
+  projectDetails.innerHTML = `
+    <div class="detail-row">
+      <div class="detail-label">Project Number</div>
+      <div class="detail-value">#${data.id}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Property Type</div>
+      <div class="detail-value">${escapeHtml(data.property_type || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">ZIP Code</div>
+      <div class="detail-value">${escapeHtml(data.zip_code || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Project Goal</div>
+      <div class="detail-value">${escapeHtml(data.goals || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Number of Windows</div>
+      <div class="detail-value">${escapeHtml(data.window_count || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">High Windows</div>
+      <div class="detail-value">${escapeHtml(data.high_windows || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Window Height</div>
+      <div class="detail-value">${escapeHtml(data.window_height || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Measurements</div>
+      <div class="detail-value">${escapeHtml(data.measurements || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Existing Film</div>
+      <div class="detail-value">${escapeHtml(data.existing_film || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Removal Details</div>
+      <div class="detail-value">${escapeHtml(data.removal_details || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Timing</div>
+      <div class="detail-value">${escapeHtml(data.timing || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Additional Notes</div>
+      <div class="detail-value">${escapeHtml(data.notes || 'None')}</div>
+    </div>
+
+    <button type="button">Submit Sealed Proposal</button>
+  `;
+}
+
+loadProject();  
 </script>
 </body>
   
