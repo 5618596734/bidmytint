@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6f8;
+  color: #142033;
+}
+
+header {
+  background: #07182d;
+  color: white;
+  padding: 20px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.logo span {
+  color: #d6a84b;
+}
+
+.header-right {
+  font-size: 14px;
+  color: #d8dee7;
+}
+
+.hero {
+  background: #07182d;
+  color: white;
+  padding: 50px 7% 60px;
+}
+
+.hero h1 {
+  margin: 0 0 10px;
+  font-size: 40px;
+}
+
+.hero p {
+  margin: 0;
+  color: #cbd3df;
+  font-size: 17px;
+}
+
+.container {
+  width: 86%;
+  max-width: 1100px;
+  margin: 40px auto;
+}
+
+.proposal-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 20px;
+  border: 1px solid #e7e9ed;
+  box-shadow: 0 4px 18px rgba(0,0,0,.06);
+}
+
+.proposal-price {
+  font-size: 30px;
+  font-weight: 700;
+  color: #07182d;
+  margin-bottom: 20px;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.detail-label {
+  font-size: 12px;
+  color: #8a93a2;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.detail-value {
+  font-weight: 600;
+}
+
+button {
+  margin-top: 25px;
+  border: 0;
+  background: #d6a84b;
+  color: #07182d;
+  font-weight: 700;
+  padding: 14px 22px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+@media(max-width: 700px) {
+  .details {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
+}
+</style>
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Proposals | BidMyTint</title>
+</head>
+
+<body>
+<header>
+  <div class="logo">BidMy<span>Tint</span></div>
+  <div class="header-right">Customer Portal</div>
+</header>
+
+<section class="hero">
+  <h1>Your Project Proposals</h1>
+  <p>Compare sealed proposals from architectural window film professionals.</p>
+</section>
+
+<main class="container">
+  <div id="proposalsList">
+    <p>Loading proposals...</p>
+  </div>
+</main>
+</body>
+</html>
