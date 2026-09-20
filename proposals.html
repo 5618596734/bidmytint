@@ -147,7 +147,15 @@ const accessToken = params.get('token');
 if (!projectId || !accessToken) {
   document.getElementById('proposalsList').innerHTML =
     '<p>This proposal link is invalid or incomplete.</p>';
-}  
+}
+async function loadProposals() {
+  if (!projectId || !accessToken) return;
+
+  document.getElementById('proposalsList').innerHTML =
+    '<p>Customer access is being verified...</p>';
+}
+
+loadProposals();  
 </script>
 </body>
 </html>
