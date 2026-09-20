@@ -153,6 +153,66 @@ async function loadProposals() {
 
   document.getElementById('proposalsList').innerHTML =
     '<p>Customer access is being verified...</p>';
+const { data, error } = await db.functions.invoke('get-customer-proposals', {
+  body: {
+    projectId: Number(projectId),
+    accessToken: accessToken
+  }
+});
+
+if (error) {
+  console.error(error);
+  document.getElementById('proposalsList').innerHTML =
+    '<p>Unable to load proposals. Please check your project link.</p>';
+  return;
+}
+
+const proposals = data?.proposals || [];
+if (proposals.length === 0) {
+  document.getElementById('proposalsList').innerHTML =
+    '<p>No proposals have been submitted for this project yet.</p>';
+  return;
+}
+
+document.getElementById('proposalsList').innerHTML = proposals.map(proposal => `
+  <div class="proposal-card">
+    <div class="proposal-price">
+      $${Number(proposal.proposal_price).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })}
+    </div>
+
+    <div class="details">
+      <div>
+        <div class="detail-label">Film Manufacturer</div>
+        <div class="detail-value">${proposal.film_manufacturer || 'Not provided'}</div>
+      </div>
+
+      <div>
+        <div class="detail-label">Film / Product</div>
+        <div class="detail-value">${proposal.film_product || 'Not provided'}</div>
+      </div>
+
+      <div>
+        <div class="detail-label">Warranty</div>
+        <div class="detail-value">${proposal.warranty || 'Not provided'}</div>
+      </div>
+
+      <div>
+        <div class="detail-label">Availability</div>
+        <div class="detail-value">${proposal.availability || 'Not provided'}</div>
+      </div>
+
+      <div>
+        <div class="detail-label">Proposal Notes</div>
+        <div class="detail-value">${proposal.proposal_notes || 'None'}</div>
+      </div>
+    </div>
+
+    <button type="button">Select This Proposal</button>
+  </div>
+`).join('');  
 }
 
 loadProposals();  
