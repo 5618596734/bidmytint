@@ -140,6 +140,14 @@ button {
 const SUPABASE_URL = 'https://pkdleiskrqxbouozmquo.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const params = new URLSearchParams(window.location.search);
+const projectId = params.get('id');
+const accessToken = params.get('token');
+
+if (!projectId || !accessToken) {
+  document.getElementById('proposalsList').innerHTML =
+    '<p>This proposal link is invalid or incomplete.</p>';
+}  
 </script>
 </body>
 </html>
