@@ -184,31 +184,7 @@
     message.textContent = error.message;
     return;
   }
-const user = data.user;
-
-if (!user) {
-  message.textContent = 'Unable to create contractor profile.';
-  return;
-}
-
-const { error: profileError } = await db
-  .from('contractors')
-  .insert({
-    user_id: user.id,
-    company_name: companyName,
-    phone: phone,
-    service_area: serviceArea,
-    email: email,
-    status: 'pending'
-  });
-
-if (profileError) {
-  console.error(profileError);
-  message.textContent = 'Account created, but contractor profile could not be saved.';
-  return;
-}  
-    message.textContent = 'Account created successfully.';
-}
+message.textContent = 'Account created. Please check your email and confirm your email address. After confirmation, sign in to complete your contractor profile.';}
 </script>
 </body>
 </html>
