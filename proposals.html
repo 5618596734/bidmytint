@@ -232,8 +232,8 @@ document.getElementById('proposalsList').innerHTML = proposals.map(proposal => `
 loadProposals();
 async function acceptProposal(proposalId) {
   const confirmed = confirm(
-    "Are you sure you want to select this proposal? This will award the project to this contractor."
-  );
+  Are you sure you want to select this proposal? Your next step will be the Project Confirmation Payment. This payment will be applied toward the total project price and is not an additional charge.
+    );
 
   if (!confirmed) return;
 
