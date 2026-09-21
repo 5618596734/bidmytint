@@ -210,8 +210,11 @@ document.getElementById('proposalsList').innerHTML = proposals.map(proposal => `
       </div>
     </div>
 
-    <button type="button" onclick="acceptProposal(${proposal.id})">Select This Proposal</button>
-    </div>
+    ${proposal.status === 'accepted'
+  ? `<button type="button" disabled>✓ Selected Proposal</button>`
+  : `<button type="button" onclick="acceptProposal(${proposal.id})">Select This Proposal</button>`
+}
+</div>
 `).join('');  
 }
 
