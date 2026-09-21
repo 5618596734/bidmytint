@@ -273,6 +273,30 @@ function showProposalForm() {
 async function submitProposal() {
   const params = new URLSearchParams(window.location.search);
   const projectId = params.get('id');
+const { data: { user }, error: userError } = await db.auth.getUser();
+
+if (userError || !user) {
+  alert('Please sign in before submitting a proposal.');
+  window.location.href = 'contractor-login.html';
+  return;
+}
+
+const { data: contractor, error: contractorError } = await db
+  .from('contractors')
+  .select('id, status')
+  .eq('user_id', user.id)
+  .single();
+
+if (contractorError || !contractor) {
+  console.error(contractorError);
+  alert('Contractor profile not found.');
+  return;
+}
+
+if (contractor.status !== 'approved') {
+  alert('Your contractor account must be approved before submitting proposals.');
+  return;
+}  
 
   const price = document.getElementById('proposalPrice').value;
   const manufacturer = document.getElementById('filmManufacturer').value;
@@ -290,6 +314,7 @@ async function submitProposal() {
     .from('proposals')
     .insert({
       project_id: Number(projectId),
+      contractor_id: contractor.id,
       proposal_price: Number(price),
       film_manufacturer: manufacturer,
       film_product: product,
