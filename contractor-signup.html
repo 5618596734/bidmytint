@@ -159,8 +159,7 @@
 <script>
   const SUPABASE_URL = 'https://pkdleiskrqxbouozmquo.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
-  const db = supabase.createClient(supabaseUrl, supabaseKey);
-  async function submitContractorApplication() {
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);  async function submitContractorApplication() {
   const companyName = document.getElementById('companyName').value.trim();
   const phone = document.getElementById('phone').value.trim();
   const serviceArea = document.getElementById('serviceArea').value.trim();
