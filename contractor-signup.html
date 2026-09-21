@@ -144,8 +144,7 @@
     <label for="password">Create Password</label>
     <input type="password" id="password" minlength="6">
 
-    <button type="button">Submit Contractor Application</button>
-
+  <button type="button" onclick="submitContractorApplication()">Submit Contractor Application</button>
     <div id="message"></div>
 
     <div class="login-link">
@@ -155,6 +154,62 @@
 
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+  const SUPABASE_URL = 'https://pkdleiskrqxbouozmquo.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
+  const db = supabase.createClient(supabaseUrl, supabaseKey);
+  async function submitContractorApplication() {
+  const companyName = document.getElementById('companyName').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const serviceArea = document.getElementById('serviceArea').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const message = document.getElementById('message');
+
+  if (!companyName || !phone || !serviceArea || !email || !password) {
+    message.textContent = 'Please complete all fields.';
+    return;
+  }
+
+  message.textContent = 'Creating your contractor account...';
+
+  const { data, error } = await db.auth.signUp({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    console.error(error);
+    message.textContent = error.message;
+    return;
+  }
+const user = data.user;
+
+if (!user) {
+  message.textContent = 'Unable to create contractor profile.';
+  return;
+}
+
+const { error: profileError } = await db
+  .from('contractors')
+  .insert({
+    user_id: user.id,
+    company_name: companyName,
+    phone: phone,
+    service_area: serviceArea,
+    email: email,
+    status: 'pending'
+  });
+
+if (profileError) {
+  console.error(profileError);
+  message.textContent = 'Account created, but contractor profile could not be saved.';
+  return;
+}  
+    message.textContent = 'Account created successfully.';
+}
+</script>
 </body>
 </html>
