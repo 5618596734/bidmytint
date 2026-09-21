@@ -131,14 +131,60 @@
       placeholder="Example: Broward County, FL"
     >
 
-    <button type="button" id="saveProfile">
-      Submit Contractor Application
+    <button type="button" id="saveProfile" onclick="saveContractorProfile()">
+    Submit Contractor Application
     </button>
 
     <div id="message"></div>
 
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+  
+const SUPABASE_URL = 'https://pkdleiskrqxbouozmquo.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+async function saveContractorProfile() {
+  const companyName = document.getElementById('companyName').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const serviceArea = document.getElementById('serviceArea').value.trim();
+  const message = document.getElementById('message');
+
+  if (!companyName || !phone || !serviceArea) {
+    message.textContent = 'Please complete all fields.';
+    return;
+  }
+
+  message.textContent = 'Submitting your application...';
+
+  const { data: { user }, error: userError } = await db.auth.getUser();
+
+  if (userError || !user) {
+    message.textContent = 'Please sign in before completing your profile.';
+    window.location.href = 'contractor-login.html';
+    return;
+  }
+
+  const { error: profileError } = await db
+    .from('contractors')
+    .insert({
+      user_id: user.id,
+      company_name: companyName,
+      phone: phone,
+      service_area: serviceArea,
+      email: user.email,
+      status: 'pending'
+    });
+
+  if (profileError) {
+    console.error(profileError);
+    message.textContent = 'Unable to save your contractor application.';
+    return;
+  }
+
+  message.textContent = 'Application submitted successfully. Your account is pending approval.';  
+</script>
 </body>
 </html>
