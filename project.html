@@ -129,6 +129,18 @@ button {
 const SUPABASE_URL = 'https://pkdleiskrqxbouozmquo.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+async function requireContractorLogin() {
+  const { data: { session } } = await db.auth.getSession();
+
+  if (!session) {
+    window.location.href = 'contractor-login.html';
+    return false;
+  }
+
+  return true;
+}
+
+requireContractorLogin();  
 function escapeHtml(value) {
   return String(value ?? '')
     .replaceAll('&', '&amp;')
