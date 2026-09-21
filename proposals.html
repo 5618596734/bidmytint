@@ -210,12 +210,47 @@ document.getElementById('proposalsList').innerHTML = proposals.map(proposal => `
       </div>
     </div>
 
-    <button type="button">Select This Proposal</button>
-  </div>
+    <button type="button" onclick="acceptProposal(${proposal.id})">Select This Proposal</button>
+    </div>
 `).join('');  
 }
 
-loadProposals();  
+loadProposals();
+async function acceptProposal(proposalId) {
+  const confirmed = confirm(
+    "Are you sure you want to select this proposal? This will award the project to this contractor."
+  );
+
+  if (!confirmed) return;
+
+  try {
+    const { data, error } = await db.functions.invoke("accept-proposal", {
+      body: {
+        projectId: Number(projectId),
+        proposalId: Number(proposalId),
+        accessToken: accessToken
+      }
+    });
+
+    if (error) {
+      console.error(error);
+      alert("Unable to select this proposal. Please try again.");
+      return;
+    }
+
+    if (!data?.success) {
+      alert(data?.error || "Unable to select this proposal.");
+      return;
+    }
+
+    alert("Proposal selected successfully!");
+
+    window.location.reload();
+  } catch (error) {
+    console.error(error);
+    alert("Unable to select this proposal. Please try again.");
+  }
+}
 </script>
 </body>
 </html>
