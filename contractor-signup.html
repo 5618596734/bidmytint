@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Contractor Application | BidMyTint</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f6f8;
+      color: #172033;
+    }
+
+    header {
+      background: #071b33;
+      color: white;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .logo span {
+      color: #d4af37;
+    }
+
+    .header-right {
+      color: #d4af37;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 35px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      margin-top: 0;
+      color: #071b33;
+    }
+
+    .intro {
+      color: #5f6877;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 18px;
+      margin-bottom: 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccd1d8;
+      border-radius: 7px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 28px;
+      padding: 14px;
+      border: none;
+      border-radius: 7px;
+      background: #d4af37;
+      color: #071b33;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 22px;
+    }
+
+    .login-link a {
+      color: #071b33;
+      font-weight: 600;
+    }
+
+    #message {
+      margin-top: 18px;
+      text-align: center;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">BidMy<span>Tint</span></div>
+  <div class="header-right">Contractor Network</div>
+</header>
+
+<div class="container">
+  <div class="card">
+
+    <h1>Join the BidMyTint Contractor Network</h1>
+
+    <p class="intro">
+      Create your contractor account to receive qualified architectural
+      window film opportunities in your service area. There are no membership
+      fees and no fees to submit proposals.
+    </p>
+
+    <label for="companyName">Company Name</label>
+    <input type="text" id="companyName">
+
+    <label for="phone">Business Phone</label>
+    <input type="tel" id="phone">
+
+    <label for="serviceArea">Service Area</label>
+    <input type="text" id="serviceArea" placeholder="Example: Broward County, FL">
+
+    <label for="email">Email Address</label>
+    <input type="email" id="email">
+
+    <label for="password">Create Password</label>
+    <input type="password" id="password" minlength="6">
+
+    <button type="button">Submit Contractor Application</button>
+
+    <div id="message"></div>
+
+    <div class="login-link">
+      Already have an account?
+      <a href="contractor-login.html">Contractor Login</a>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
