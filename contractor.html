@@ -193,8 +193,10 @@ footer {
 
 <header>
   <div class="logo">BidMy<span>Tint</span></div>
-  <div class="header-right">Contractor Portal</div>
-</header>
+  <div class="header-right">
+  <span>Contractor Portal</span>
+  <button type="button" onclick="contractorLogout()">Logout</button>
+</div></header>
 
 <section class="hero">
   <h1>Project Opportunities</h1>
@@ -236,6 +238,10 @@ async function requireContractorLogin() {
   return true;
 }
 requireContractorLogin();
+async function contractorLogout() {
+  await db.auth.signOut();
+  window.location.href = 'contractor-login.html';
+}
 function escapeHtml(value) {
   return String(value ?? '')
     .replaceAll('&', '&amp;')
