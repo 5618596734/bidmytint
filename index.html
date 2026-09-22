@@ -708,6 +708,7 @@ const { error: uploadError } = await db.storage
 
   uploadedPhotos.push(fileName);
 }  
+  const customerAccessToken = crypto.randomUUID() + crypto.randomUUID();
   const { error } = await db
   .from('projects')
   .insert({
@@ -723,7 +724,7 @@ removal_details: document.getElementById("removal").value,
 timing: document.getElementById("timing").value,
 notes: document.getElementById("notes").value,  
 photos: uploadedPhotos.join(", "),
-  
+customer_access_token: customerAccessToken,
   
  
   
