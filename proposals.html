@@ -221,7 +221,7 @@ document.getElementById('proposalsList').innerHTML = proposals.map(proposal => `
     <div class="detail-value">Service Area: ${winningContractor.service_area || 'Not provided'}</div>
   </div>
 ` : ''}
-    ${proposal.status === 'accepted'
+    ${proposal.status === 'selected'
   ? `<button type="button" disabled>✓ Selected Proposal</button>`
   : `<button type="button" onclick="acceptProposal(${proposal.id})">Select This Proposal</button>`
 }
