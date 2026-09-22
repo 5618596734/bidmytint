@@ -204,17 +204,17 @@ const accessToken = params.get('token');
     return;
   }
 
-  const project = data.project;
+ const acceptedProposalId = data.acceptedProposalId;
   const proposals = data.proposals || [];
 
-  if (!project || !project.accepted_proposal_id) {
-    document.getElementById('proposalTotal').textContent = '—';
+ if (!acceptedProposalId) {
+   document.getElementById('proposalTotal').textContent = '—';
     message.textContent = 'No selected proposal was found.';
     return;
   }
 
   const selectedProposal = proposals.find(
-    proposal => Number(proposal.id) === Number(project.accepted_proposal_id)
+    proposal => Number(proposal.id) === Number(acceptedProposalId)
   );
 
   if (!selectedProposal) {
