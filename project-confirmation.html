@@ -173,6 +173,71 @@
 
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://pkdleiskrqxbouozmquo.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const params = new URLSearchParams(window.location.search);
+const projectId = params.get('id');
+const accessToken = params.get('token');
+  async function loadProjectConfirmation() {
+  const message = document.getElementById('message');
 
+  if (!projectId || !accessToken) {
+    document.getElementById('proposalTotal').textContent = '—';
+    message.textContent = 'Invalid project confirmation link.';
+    return;
+  }
+
+  const { data, error } = await db.functions.invoke('get-customer-proposals', {
+    body: {
+      projectId: Number(projectId),
+      accessToken: accessToken
+    }
+  });
+
+  if (error || !data) {
+    console.error(error);
+    document.getElementById('proposalTotal').textContent = '—';
+    message.textContent = 'Unable to load project confirmation.';
+    return;
+  }
+
+  const project = data.project;
+  const proposals = data.proposals || [];
+
+  if (!project || !project.accepted_proposal_id) {
+    document.getElementById('proposalTotal').textContent = '—';
+    message.textContent = 'No selected proposal was found.';
+    return;
+  }
+
+  const selectedProposal = proposals.find(
+    proposal => Number(proposal.id) === Number(project.accepted_proposal_id)
+  );
+
+  if (!selectedProposal) {
+    document.getElementById('proposalTotal').textContent = '—';
+    message.textContent = 'Unable to find the selected proposal.';
+    return;
+  }
+
+  const total = Number(selectedProposal.proposal_price);
+  const confirmationPayment = total * 0.05;
+  const remainingBalance = total - confirmationPayment;
+
+  document.getElementById('proposalTotal').textContent =
+    '$' + total.toFixed(2);
+
+  document.getElementById('confirmationPayment').textContent =
+    '$' + confirmationPayment.toFixed(2);
+
+  document.getElementById('remainingBalance').textContent =
+    '$' + remainingBalance.toFixed(2);
+}
+
+loadProjectConfirmation();
+</script>
 </body>
 </html>
