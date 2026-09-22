@@ -745,8 +745,18 @@ const privateProjectLink =
   `proposals.html?id=${newProject.id}&token=${encodeURIComponent(customerAccessToken)}`;
 
 alert("Success! Your BidMyTint project has been submitted.");
+const { error: emailError } = await db.functions.invoke('send-project-link', {
+  body: {
+    email: document.getElementById('email').value.trim(),
+    projectId: newProject.id,
+    accessToken: customerAccessToken
+  }
+});
 
-window.location.href = privateProjectLink;
+if (emailError) {
+  console.error('Unable to send project email:', emailError);
+}
+  window.location.href = privateProjectLink;
 }
 
 </script>
