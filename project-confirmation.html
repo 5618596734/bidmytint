@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Confirmation | BidMyTint</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f6f8;
+      color: #172033;
+    }
+
+    header {
+      background: #071a33;
+      color: white;
+      padding: 22px 30px;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #d4af37;
+    }
+
+    .hero {
+      background: #071a33;
+      color: white;
+      text-align: center;
+      padding: 45px 20px 65px;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: 36px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #d8dee8;
+      font-size: 17px;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: -35px auto 60px;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #071a33;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 0;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 17px;
+    }
+
+    .price-row strong {
+      color: #071a33;
+    }
+
+    .confirmation {
+      margin-top: 24px;
+      padding: 20px;
+      background: #f7f4e9;
+      border-left: 4px solid #d4af37;
+      line-height: 1.6;
+    }
+
+    .payment-button {
+      width: 100%;
+      margin-top: 28px;
+      padding: 17px;
+      border: 0;
+      border-radius: 7px;
+      background: #d4af37;
+      color: #071a33;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .payment-button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 18px;
+      color: #667085;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 29px;
+      }
+
+      .card {
+        padding: 24px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">BidMy<span>Tint</span></div>
+</header>
+
+<section class="hero">
+  <h1>Confirm Your Project</h1>
+  <p>Review your selected proposal before completing your project confirmation.</p>
+</section>
+
+<div class="container">
+  <div class="card">
+
+    <h2>Project Summary</h2>
+
+    <div class="price-row">
+      <span>Selected Proposal</span>
+      <strong id="proposalTotal">Loading...</strong>
+    </div>
+
+    <div class="price-row">
+      <span>Project Confirmation Payment</span>
+      <strong id="confirmationPayment">—</strong>
+    </div>
+
+    <div class="price-row">
+      <span>Remaining Project Balance</span>
+      <strong id="remainingBalance">—</strong>
+    </div>
+
+    <div class="confirmation">
+      Your Project Confirmation Payment is applied toward the total project price.
+      It is <strong>not an additional charge</strong>. After the confirmation payment
+      is completed, the project will be confirmed and the customer and contractor
+      contact information will be released.
+    </div>
+
+    <button class="payment-button" id="paymentButton" disabled>
+      Confirm Project & Pay
+    </button>
+
+    <div id="message">
+      Secure payment will be available when payment processing is connected.
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
