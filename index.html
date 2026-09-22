@@ -709,8 +709,8 @@ const { error: uploadError } = await db.storage
   uploadedPhotos.push(fileName);
 }  
   const customerAccessToken = crypto.randomUUID() + crypto.randomUUID();
-  const { error } = await db
-  .from('projects')
+  const { data: newProject, error } = await db
+    .from('projects')
   .insert({
   property_type: document.getElementById("property").value,
   zip_code: document.getElementById("zip").value,
@@ -732,14 +732,21 @@ customer_access_token: customerAccessToken,
   customer_email: email,
   customer_phone: phone,
   status: 'new'
-});
+  })
+  .select('id')
+  .single();
   if (error) {
   console.error(error);
   alert("There was a problem submitting your project. Please try again.");
   return;
 }
 
+const privateProjectLink =
+  `proposals.html?id=${newProject.id}&token=${encodeURIComponent(customerAccessToken)}`;
+
 alert("Success! Your BidMyTint project has been submitted.");
+
+window.location.href = privateProjectLink;
 }
 
 </script>
