@@ -257,7 +257,7 @@ async function acceptProposal(proposalId) {
     }
 
     alert("Proposal selected successfully!");
-
+    window.location.href = `project-confirmation.html?id=${projectId}&token=${encodeURIComponent(accessToken)}`;
     window.location.reload();
   } catch (error) {
     console.error(error);
