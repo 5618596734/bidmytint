@@ -159,18 +159,24 @@ async function loadProject() {
     projectDetails.innerHTML = '<p>Project not found.</p>';
     return;
   }
-const { data: functionData, error: functionError } =
-  await db.functions.invoke(
-    'get-contractor-project',
-    {
-      body: {
-        projectId: Number(projectId)
-      }
-    }
-  );
+const response = await fetch(
+  `${SUPABASE_URL}/functions/v1/get-contractor-project`,
+  {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${(await db.auth.getSession()).data.session.access_token}`
+    },
+    body: JSON.stringify({
+      projectId: Number(projectId)
+    })
+  }
+);
 
-if (functionError || !functionData?.success || !functionData?.project) {
-  console.error(error);
+const functionData = await response.json();
+
+if (!response.ok || !functionData?.success || !functionData?.project) {
   projectDetails.innerHTML = `
     <h2>This project is no longer available.</h2>
     <p style="margin-top:10px;">
@@ -179,7 +185,8 @@ if (functionError || !functionData?.success || !functionData?.project) {
   `;
   return false;
 }
-  const data = functionData.project;
+
+const data = functionData.project;
   projectDetails.innerHTML = `
     <div class="detail-row">
       <div class="detail-label">Project Number</div>
