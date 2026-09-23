@@ -166,12 +166,16 @@ async function loadProject() {
     .eq('id', projectId)
     .single();
 
-  if (error || !data) {
-    console.error(error);
-    projectDetails.innerHTML = '<p>Unable to load this project.</p>';
-    return;
-  }
-
+ if (error || !data) {
+  console.error(error);
+  projectDetails.innerHTML = `
+    <h2>This project is no longer available.</h2>
+    <p style="margin-top:10px;">
+      This project has been closed or awarded to another contractor.
+    </p>
+  `;
+  return false;
+}
   projectDetails.innerHTML = `
     <div class="detail-row">
       <div class="detail-label">Project Number</div>
@@ -406,14 +410,14 @@ if (contractor.status !== 'approved') {
 
   document.getElementById('projectDetails').appendChild(contactSection);
 }  
-  loadProject().then(() => {
-  const params = new URLSearchParams(window.location.search);
+  loadProject().then((projectLoaded) => {
+    const params = new URLSearchParams(window.location.search);
   const projectId = params.get('id');
 
-  if (projectId) {
-    loadAwardedCustomerContact(projectId);
-  }
-});
+  if (projectId && projectLoaded !== false) {
+  loadAwardedCustomerContact(projectId);
+}
+  });
 </script>
 </body>
   
