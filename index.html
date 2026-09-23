@@ -354,7 +354,7 @@ A simpler way to find the right window film professional.
 <div class="step">
 <div class="number">1</div>
 <h3>Tell Us About Your Project</h3>
-<p>Answer a few simple questions and upload photos of your windows.</p>
+<p>Answer a few simple questions, provide approximate measurements, and upload photos of your windows.</p>
 </div>
 
 <div class="step">
@@ -400,7 +400,7 @@ performance, warranty and installation details.
 <h2>Tell Us About Your Project</h2>
 
 <p class="intro">
-We'll use this information to help window film professionals understand your project.
+Answer a few simple questions, provide approximate measurements, and upload photos of your windows so professionals can prepare more accurate proposals.
 </p>
 
 <div class="field">
@@ -416,8 +416,19 @@ We'll use this information to help window film professionals understand your pro
 </div>
 
 <div class="field">
+<label>Project Address</label>
+<input id="projectAddress" type="text" autocomplete="street-address" placeholder="Street address">
+<small style="display:block; margin-top:6px; color:#6b7280;">Kept private from contractors until the Project Confirmation Payment is completed.</small>
+</div>
+
+<div class="field">
+<label>City</label>
+<input id="city" type="text" autocomplete="address-level2" placeholder="Example: Fort Lauderdale">
+</div>
+
+<div class="field">
 <label>Project ZIP Code</label>
-<input id="zip" type="text" maxlength="10" placeholder="Example: 33324">
+<input id="zip" type="text" maxlength="10" autocomplete="postal-code" placeholder="Example: 33324">
 </div>
 
 <div class="field">
@@ -644,10 +655,12 @@ window.scrollTo(0,0);
 function reviewProject(){
 
 let property=document.getElementById("property").value;
-let zip=document.getElementById("zip").value;
+let projectAddress=document.getElementById("projectAddress").value.trim();
+let city=document.getElementById("city").value.trim();
+let zip=document.getElementById("zip").value.trim();
 
-if(!property || !zip){
-alert("Please select the property type and enter the project ZIP code.");
+if(!property || !projectAddress || !city || !zip){
+alert("Please select the property type and enter the project address, city and ZIP code.");
 return;
 }
 
@@ -659,6 +672,8 @@ goals.push(item.value);
 
 let summary=`
 <strong>Property:</strong> ${property}<br>
+<strong>Project Address:</strong> ${projectAddress}<br>
+<strong>City:</strong> ${city}<br>
 <strong>ZIP Code:</strong> ${zip}<br>
 <strong>Project Goals:</strong> ${goals.length ? goals.join(", ") : "Not specified"}<br>
 <strong>Windows:</strong> ${document.getElementById("windows").value}<br>
@@ -713,7 +728,9 @@ const { error: uploadError } = await db.storage
     .from('projects')
   .insert({
   property_type: document.getElementById("property").value,
-  zip_code: document.getElementById("zip").value,
+  project_address: document.getElementById("projectAddress").value.trim(),
+  city: document.getElementById("city").value.trim(),
+  zip_code: document.getElementById("zip").value.trim(),
   goals: selectedGoals,
   window_count: document.getElementById("windows").value,
  high_windows: document.getElementById("highWindows").value,
@@ -743,8 +760,24 @@ customer_access_token: customerAccessToken,
 
 const privateProjectLink =
   `proposals.html?id=${newProject.id}&token=${encodeURIComponent(customerAccessToken)}`;
+// Notify approved contractors serving this project's area
+const { error: contractorNotificationError } = await db.functions.invoke(
+  'notify-contractors',
+  {
+    body: {
+      projectId: newProject.id
+    }
+  }
+);
 
-alert("Success! Your BidMyTint project has been submitted.");
+if (contractorNotificationError) {
+  console.error(
+    'Unable to notify contractors:',
+    contractorNotificationError
+  );
+}
+  
+  alert("Success! Your BidMyTint project has been submitted.");
 const { error: emailError } = await db.functions.invoke('send-project-link', {
   body: {
     email: document.getElementById('email').value.trim(),
