@@ -159,22 +159,17 @@ async function loadProject() {
     projectDetails.innerHTML = '<p>Project not found.</p>';
     return;
   }
-const { data: functionData, error } = await db.functions.invoke(
-  'get-contractor-project',
-  {
-    body: {
-      projectId: Number(projectId)
+const { data: functionData, error: functionError } =
+  await db.functions.invoke(
+    'get-contractor-project',
+    {
+      body: {
+        projectId: Number(projectId)
+      }
     }
-  }
-);
+  );
 
-const data = functionData?.project;
-console.log("PROJECT FUNCTION RESULT:", {
-  functionData,
-  error,
-  data
-});
-  if (error || !data) {
+if (functionError || !functionData?.success || !functionData?.project) {
   console.error(error);
   projectDetails.innerHTML = `
     <h2>This project is no longer available.</h2>
@@ -184,6 +179,7 @@ console.log("PROJECT FUNCTION RESULT:", {
   `;
   return false;
 }
+  const data = functionData.project;
   projectDetails.innerHTML = `
     <div class="detail-row">
       <div class="detail-label">Project Number</div>
