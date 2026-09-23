@@ -169,6 +169,11 @@ const { data: functionData, error } = await db.functions.invoke(
 );
 
 const data = functionData?.project;
+console.log("PROJECT FUNCTION RESULT:", {
+  functionData,
+  error,
+  data
+});
   if (error || !data) {
   console.error(error);
   projectDetails.innerHTML = `
