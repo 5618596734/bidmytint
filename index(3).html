@@ -760,8 +760,24 @@ customer_access_token: customerAccessToken,
 
 const privateProjectLink =
   `proposals.html?id=${newProject.id}&token=${encodeURIComponent(customerAccessToken)}`;
+// Notify approved contractors serving this project's area
+const { error: contractorNotificationError } = await db.functions.invoke(
+  'notify-contractors',
+  {
+    body: {
+      projectId: newProject.id
+    }
+  }
+);
 
-alert("Success! Your BidMyTint project has been submitted.");
+if (contractorNotificationError) {
+  console.error(
+    'Unable to notify contractors:',
+    contractorNotificationError
+  );
+}
+  
+  alert("Success! Your BidMyTint project has been submitted.");
 const { error: emailError } = await db.functions.invoke('send-project-link', {
   body: {
     email: document.getElementById('email').value.trim(),
