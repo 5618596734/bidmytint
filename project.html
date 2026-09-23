@@ -345,6 +345,21 @@ if (contractor.status !== 'approved') {
     return;
   }
 
+  const { error: notificationError } = await db.functions.invoke(
+  'notify-customer-proposal',
+  {
+    body: {
+      projectId: Number(projectId)
+    }
+  }
+);
+
+if (notificationError) {
+  console.error(
+    'Unable to notify customer about new proposal:',
+    notificationError
+  );
+}  
   alert('Your sealed proposal has been submitted successfully.');
 
   const form = document.getElementById('proposalForm');
