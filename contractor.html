@@ -282,12 +282,11 @@ function escapeHtml(value) {
 async function loadProjects() {
   const projectsList = document.getElementById('projectsList');
 
-  const { data, error } = await db
-    .from('contractor_projects')
-    .select('*')
-    .eq('status', 'new')
-    .order('created_at', { ascending: false });
+const { data: functionData, error } = await db.functions.invoke(
+  'get-contractor-projects'
+);
 
+const data = functionData?.projects;
   if (error) {
     console.error(error);
     projectsList.innerHTML = '<p>Unable to load projects right now.</p>';
