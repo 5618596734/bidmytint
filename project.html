@@ -348,7 +348,72 @@ if (contractor.status !== 'approved') {
     form.remove();
   }
 }
-  loadProject();  
+  async function loadAwardedCustomerContact(projectId) {
+  const contactSection = document.createElement('div');
+  contactSection.style.marginTop = '30px';
+  contactSection.style.padding = '22px';
+  contactSection.style.background = '#f7f8fa';
+  contactSection.style.borderRadius = '8px';
+
+  const { data, error } = await db.functions.invoke(
+    'get-awarded-project-contact',
+    {
+      body: {
+        projectId: Number(projectId)
+      }
+    }
+  );
+
+  if (error || !data?.success) {
+    contactSection.innerHTML = `
+      <strong>Customer Contact Information</strong>
+      <p style="margin-bottom:0;">
+        Customer contact information will be released to the winning contractor
+        after the Project Confirmation Payment clears.
+      </p>
+    `;
+  } else {
+    const customer = data.customer;
+
+    contactSection.innerHTML = `
+      <strong>Customer Contact Information</strong>
+
+      <div class="detail-row">
+        <div class="detail-label">Customer</div>
+        <div class="detail-value">${escapeHtml(customer.name || 'Not provided')}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Phone</div>
+        <div class="detail-value">${escapeHtml(customer.phone || 'Not provided')}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Email</div>
+        <div class="detail-value">${escapeHtml(customer.email || 'Not provided')}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Project Address</div>
+        <div class="detail-value">
+          ${escapeHtml(customer.address || '')}
+          ${escapeHtml(customer.city || '')}
+          ${escapeHtml(customer.zipCode || '')}
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('projectDetails').appendChild(contactSection);
+}  
+  loadProject().then(() => {
+  const params = new URLSearchParams(window.location.search);
+  const projectId = params.get('id');
+
+  if (projectId) {
+    loadAwardedCustomerContact(projectId);
+  }
+});
 </script>
 </body>
   
