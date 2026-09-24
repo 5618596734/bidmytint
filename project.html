@@ -294,8 +294,21 @@ function showProposalForm() {
         <div class="detail-label">Proposal Notes</div>
         <textarea id="proposalNotes" rows="5" placeholder="Additional proposal details"></textarea>
       </div>
-
-      <button type="button" onclick="submitProposal()">Send Sealed Proposal</button>
+${Array.isArray(data.photos) && data.photos.length > 0 ? `
+  <div class="detail-row">
+    <div class="detail-label">Project Photos</div>
+    <div class="detail-value">
+      ${data.photos.map(photo => `
+        <img
+          src="${escapeHtml(photo)}"
+          alt="Project photo"
+          style="max-width:100%; width:300px; height:auto; margin:10px 10px 10px 0; border-radius:8px;"
+        >
+      `).join('')}
+    </div>
+  </div>
+` : ''}
+<button type="button" onclick="submitProposal()">Send Sealed Proposal</button>
       </div>
   `);
 
