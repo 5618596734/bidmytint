@@ -187,6 +187,7 @@ if (!response.ok || !functionData?.success || !functionData?.project) {
 }
 
 const data = functionData.project;
+const existingProposal = functionData.existingProposal;
   projectDetails.innerHTML = `
     <div class="detail-row">
       <div class="detail-label">Project Number</div>
@@ -267,8 +268,46 @@ ${Array.isArray(data.photos) && data.photos.length > 0 ? `
     </div>
   </div>
 ` : ''}
-<button type="button" onclick="showProposalForm()">Submit Sealed Proposal</button>
-    `;
+${existingProposal ? `
+  <div style="margin-top:25px; padding:20px; background:#f7f8fa; border:1px solid #e1e5ea; border-radius:8px;">
+    <div style="font-size:20px; font-weight:700; color:#07182d; margin-bottom:15px;">
+      ✓ Proposal Submitted
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Your Proposal Price</div>
+      <div class="detail-value">$${Number(existingProposal.proposal_price).toFixed(2)}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Film Manufacturer</div>
+      <div class="detail-value">${escapeHtml(existingProposal.film_manufacturer || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Film / Product</div>
+      <div class="detail-value">${escapeHtml(existingProposal.film_product || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Warranty</div>
+      <div class="detail-value">${escapeHtml(existingProposal.warranty || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Availability</div>
+      <div class="detail-value">${escapeHtml(existingProposal.availability || 'Not provided')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Proposal Notes</div>
+      <div class="detail-value">${escapeHtml(existingProposal.proposal_notes || 'None')}</div>
+    </div>
+  </div>
+` : `
+  <button type="button" onclick="showProposalForm()">Submit Sealed Proposal</button>
+`}
+`;
 }
 
 function showProposalForm() {
@@ -307,9 +346,8 @@ function showProposalForm() {
         <div class="detail-label">Proposal Notes</div>
         <textarea id="proposalNotes" rows="5" placeholder="Additional proposal details"></textarea>
       </div>
-
 <button type="button" onclick="submitProposal()">Send Sealed Proposal</button>
-      </div>
+</div>
   `);
 
   document.getElementById('proposalForm').scrollIntoView({
