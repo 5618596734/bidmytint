@@ -170,7 +170,7 @@ if (error) {
 const proposals = data?.proposals || [];
 const acceptedProposalId = data?.acceptedProposalId;
 const projectStatus = data?.projectStatus;
-const winningContractor = data?.winningContractor;
+
 if (proposals.length === 0) {
   document.getElementById('proposalsList').innerHTML =
     '<p>No proposals have been submitted for this project yet.</p>';
@@ -212,18 +212,27 @@ document.getElementById('proposalsList').innerHTML = proposals.map(proposal => `
         <div class="detail-value">${proposal.proposal_notes || 'None'}</div>
       </div>
     </div>
-    ${proposal.status === 'accepted' && winningContractor ? `
-  <div style="margin-top:20px; padding:18px; border:1px solid #c9a227; border-radius:8px;">
-    <div class="detail-label">Selected Contractor</div>
-    <div class="detail-value"><strong>${winningContractor.company_name || 'Contractor'}</strong></div>
-    <div class="detail-value">Phone: ${winningContractor.phone || 'Not provided'}</div>
-    <div class="detail-value">Email: ${winningContractor.email || 'Not provided'}</div>
-    <div class="detail-value">Service Area: ${winningContractor.service_area || 'Not provided'}</div>
-  </div>
-` : ''}
-   ${proposal.status === 'selected'
-  ? `<button type="button" onclick="goToProjectConfirmation()">Continue to Project Confirmation</button>`
-     : `<button type="button" onclick="acceptProposal(${proposal.id})">Select This Proposal</button>`
+  
+ ${acceptedProposalId
+  ? Number(proposal.id) === Number(acceptedProposalId)
+    ? `
+      <div style="margin-top:20px; font-weight:700; color:#276738;">
+        ✓ SELECTED PROPOSAL
+      </div>
+      <button type="button" onclick="goToProjectConfirmation()">
+        Continue to Project Confirmation
+      </button>
+    `
+    : `
+      <div style="margin-top:20px; font-weight:700; color:#687386;">
+        Not Selected
+      </div>
+    `
+  : `
+    <button type="button" onclick="acceptProposal(${proposal.id})">
+      Select This Proposal
+    </button>
+  `
 }
 </div>
 `).join('');  
