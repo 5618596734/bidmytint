@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contractor Opportunities | BidMyTint</title>
+<title>Contractor Dashboard | BidMyTint</title>
 
 <style>
 * {
@@ -38,6 +38,9 @@ header {
 .header-right {
   font-size: 14px;
   color: #d8dee7;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .hero {
@@ -53,7 +56,7 @@ header {
 
 .hero p {
   margin: 0;
-  max-width: 650px;
+  max-width: 700px;
   color: #cbd3df;
   font-size: 18px;
   line-height: 1.6;
@@ -63,6 +66,10 @@ header {
   width: 86%;
   max-width: 1100px;
   margin: 40px auto;
+}
+
+.dashboard-section {
+  margin-bottom: 50px;
 }
 
 .section-title {
@@ -110,13 +117,31 @@ header {
 }
 
 .badge {
-  background: #f5e9ca;
-  color: #795b19;
   padding: 7px 12px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
+}
+
+.badge-open {
+  background: #f5e9ca;
+  color: #795b19;
+}
+
+.badge-submitted {
+  background: #e8eef8;
+  color: #274c77;
+}
+
+.badge-awarded {
+  background: #e4f4e8;
+  color: #276738;
+}
+
+.badge-completed {
+  background: #eceef1;
+  color: #505968;
 }
 
 .details {
@@ -151,6 +176,14 @@ header {
   color: #687386;
 }
 
+.empty-message {
+  background: white;
+  border: 1px solid #e7e9ed;
+  border-radius: 10px;
+  padding: 22px;
+  color: #687386;
+}
+
 button {
   border: 0;
   background: #d6a84b;
@@ -163,6 +196,11 @@ button {
 
 button:hover {
   opacity: .9;
+}
+
+header button {
+  margin: 0;
+  padding: 9px 14px;
 }
 
 footer {
@@ -185,6 +223,10 @@ footer {
   .card-bottom {
     flex-direction: column;
   }
+
+  .header-right {
+    gap: 8px;
+  }
 }
 </style>
 </head>
@@ -193,40 +235,90 @@ footer {
 
 <header>
   <div class="logo">BidMy<span>Tint</span></div>
+
   <div class="header-right">
-  <span>Contractor Portal</span>
-  <button type="button" onclick="contractorLogout()">Logout</button>
-</div></header>
+    <span>Contractor Portal</span>
+    <button type="button" onclick="contractorLogout()">Logout</button>
+  </div>
+</header>
 
 <section class="hero">
-  <h1>Project Opportunities</h1>
+  <h1>Contractor Dashboard</h1>
   <p>
-    Review architectural window film projects in your service area
-    and submit professional sealed proposals.
+    Find new architectural window film opportunities, track your sealed
+    proposals, and manage projects awarded to your company.
   </p>
 </section>
 
 <main class="container">
 
-  <div class="section-title">
-    <h2>Available Projects</h2>
-    <p>Customer contact information remains private until a project is awarded.</p>
-  </div>
-<div id="projectsList">
-  
+  <section class="dashboard-section">
+    <div class="section-title">
+      <h2>Available Projects</h2>
+      <p>
+        Open projects available for sealed proposals.
+        Customer contact information remains private.
+      </p>
+    </div>
 
-</div>
+    <div id="availableProjects">
+      <p>Loading projects...</p>
+    </div>
+  </section>
+
+  <section class="dashboard-section">
+    <div class="section-title">
+      <h2>My Submitted Proposals</h2>
+      <p>
+        Projects where you have already submitted a sealed proposal.
+      </p>
+    </div>
+
+    <div id="submittedProjects">
+      <p>Loading proposals...</p>
+    </div>
+  </section>
+
+  <section class="dashboard-section">
+    <div class="section-title">
+      <h2>Awarded Projects</h2>
+      <p>
+        Projects that have been awarded to your company.
+      </p>
+    </div>
+
+    <div id="awardedProjects">
+      <p>Loading awarded projects...</p>
+    </div>
+  </section>
+
+  <section class="dashboard-section">
+    <div class="section-title">
+      <h2>Completed Projects</h2>
+      <p>
+        Your completed BidMyTint project history.
+      </p>
+    </div>
+
+    <div id="completedProjects">
+      <p>Loading completed projects...</p>
+    </div>
+  </section>
+
 </main>
 
 <footer>
   © BidMyTint — Architectural Window Film Marketplace
 </footer>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 const SUPABASE_URL = 'https://pkdleiskrqxbouozmquo.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
-  
+
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 async function requireContractorLogin() {
   const { data: { session } } = await db.auth.getSession();
 
@@ -237,10 +329,11 @@ async function requireContractorLogin() {
 
   return true;
 }
+
 async function checkContractorProfile() {
   const { data: { user } } = await db.auth.getUser();
 
-  if (!user) return;
+  if (!user) return false;
 
   const { data: contractor, error } = await db
     .from('contractors')
@@ -250,26 +343,28 @@ async function checkContractorProfile() {
 
   if (error) {
     console.error(error);
-    return;
+    return false;
   }
 
   if (!contractor) {
     window.location.href = 'contractor-profile.html';
-  return; 
+    return false;
   }
 
   if (contractor.status !== 'approved') {
-  alert('Your contractor account is pending approval.');
-  window.location.href = 'contractor-profile.html';
-  return;
+    alert('Your contractor account is pending approval.');
+    window.location.href = 'contractor-profile.html';
+    return false;
+  }
+
+  return true;
 }
-}
-requireContractorLogin();
-checkContractorProfile();
+
 async function contractorLogout() {
   await db.auth.signOut();
   window.location.href = 'contractor-login.html';
 }
+
 function escapeHtml(value) {
   return String(value ?? '')
     .replaceAll('&', '&amp;')
@@ -279,64 +374,180 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;');
 }
 
-async function loadProjects() {
-  const projectsList = document.getElementById('projectsList');
+function projectCard(project, type) {
+  let badgeText = '';
+  let badgeClass = '';
+  let note = '';
+  let buttonText = 'View Project';
 
-const { data: functionData, error } = await db.functions.invoke(
-  'get-contractor-projects'
-);
-
-const data = functionData?.projects;
-  if (error) {
-    console.error(error);
-    projectsList.innerHTML = '<p>Unable to load projects right now.</p>';
-    return;
+  if (type === 'available') {
+    badgeText = 'OPEN FOR BIDS';
+    badgeClass = 'badge-open';
+    note = 'Proposal prices are sealed. Contractors cannot see competing bids.';
   }
 
-  if (!data || data.length === 0) {
-    projectsList.innerHTML = '<p>No projects are available right now.</p>';
-    return;
+  if (type === 'submitted') {
+    badgeText = 'PROPOSAL SUBMITTED';
+    badgeClass = 'badge-submitted';
+    note = project.my_proposal
+      ? `Your sealed proposal: $${Number(project.my_proposal.proposal_price).toFixed(2)}`
+      : 'Your sealed proposal has been submitted.';
+    buttonText = 'View Proposal';
   }
 
-  projectsList.innerHTML = data.map(project => `
+  if (type === 'awarded') {
+    badgeText = 'AWARDED';
+    badgeClass = 'badge-awarded';
+    note = project.my_proposal
+      ? `Awarded proposal: $${Number(project.my_proposal.proposal_price).toFixed(2)}`
+      : 'This project has been awarded to your company.';
+    buttonText = 'View Project';
+  }
+
+  if (type === 'completed') {
+    badgeText = 'COMPLETED';
+    badgeClass = 'badge-completed';
+    note = project.my_proposal
+      ? `Final proposal: $${Number(project.my_proposal.proposal_price).toFixed(2)}`
+      : 'Completed project.';
+    buttonText = 'View Project';
+  }
+
+  return `
     <div class="project-card">
       <div class="project-top">
         <div>
           <div class="project-number">PROJECT #${project.id}</div>
           <h3>${escapeHtml(project.property_type || 'Window Film')} Project</h3>
-          <div class="location">ZIP Code: ${escapeHtml(project.zip_code || 'Not provided')}</div>
+          <div class="location">
+            ZIP Code: ${escapeHtml(project.zip_code || 'Not provided')}
+          </div>
         </div>
-        <div class="badge">OPEN FOR BIDS</div>
+
+        <div class="badge ${badgeClass}">
+          ${badgeText}
+        </div>
       </div>
 
       <div class="details">
         <div>
           <div class="detail-label">PROJECT GOAL</div>
-          <div class="detail-value">${escapeHtml(project.goals || 'Not provided')}</div>
+          <div class="detail-value">
+            ${escapeHtml(project.goals || 'Not provided')}
+          </div>
         </div>
 
         <div>
           <div class="detail-label">WINDOWS</div>
-          <div class="detail-value">${escapeHtml(project.window_count || 'Not provided')}</div>
+          <div class="detail-value">
+            ${escapeHtml(project.window_count || 'Not provided')}
+          </div>
         </div>
 
         <div>
           <div class="detail-label">TIMING</div>
-          <div class="detail-value">${escapeHtml(project.timing || 'Not provided')}</div>
+          <div class="detail-value">
+            ${escapeHtml(project.timing || 'Not provided')}
+          </div>
         </div>
       </div>
 
       <div class="card-bottom">
-        <div class="note">
-          Proposal prices are sealed. Contractors cannot see competing bids.
-        </div>
-        <button type="button" onclick="window.location.href='project.html?id=${project.id}'">View Project</button>
-        </div>
+        <div class="note">${escapeHtml(note)}</div>
+
+        <button
+          type="button"
+          onclick="window.location.href='project.html?id=${project.id}'"
+        >
+          ${buttonText}
+        </button>
+      </div>
     </div>
-  `).join('');
+  `;
 }
 
-loadProjects();
+function renderSection(elementId, projects, type, emptyMessage) {
+  const element = document.getElementById(elementId);
+
+  if (!projects || projects.length === 0) {
+    element.innerHTML = `
+      <div class="empty-message">
+        ${escapeHtml(emptyMessage)}
+      </div>
+    `;
+    return;
+  }
+
+  element.innerHTML = projects
+    .map(project => projectCard(project, type))
+    .join('');
+}
+
+async function loadDashboard() {
+  const availableElement = document.getElementById('availableProjects');
+  const submittedElement = document.getElementById('submittedProjects');
+  const awardedElement = document.getElementById('awardedProjects');
+  const completedElement = document.getElementById('completedProjects');
+
+  const { data: functionData, error } = await db.functions.invoke(
+    'get-contractor-projects'
+  );
+
+  if (error || !functionData?.success) {
+    console.error(error, functionData);
+
+    availableElement.innerHTML =
+      '<p>Unable to load contractor projects right now.</p>';
+
+    submittedElement.innerHTML = '';
+    awardedElement.innerHTML = '';
+    completedElement.innerHTML = '';
+    return;
+  }
+
+  renderSection(
+    'availableProjects',
+    functionData.availableProjects,
+    'available',
+    'No new projects are available right now.'
+  );
+
+  renderSection(
+    'submittedProjects',
+    functionData.submittedProjects,
+    'submitted',
+    'You do not have any pending submitted proposals.'
+  );
+
+  renderSection(
+    'awardedProjects',
+    functionData.awardedProjects,
+    'awarded',
+    'You do not have any active awarded projects.'
+  );
+
+  renderSection(
+    'completedProjects',
+    functionData.completedProjects,
+    'completed',
+    'You do not have any completed projects yet.'
+  );
+}
+
+async function initializeDashboard() {
+  const loggedIn = await requireContractorLogin();
+
+  if (!loggedIn) return;
+
+  const approved = await checkContractorProfile();
+
+  if (!approved) return;
+
+  await loadDashboard();
+}
+
+initializeDashboard();
 </script>
+
 </body>
 </html>
