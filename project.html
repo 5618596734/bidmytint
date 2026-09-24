@@ -418,7 +418,7 @@ if (notificationError) {
     }
   );
 
-  if (error || !data?.success) {
+  if (error || !data?.success || !data?.customer) {
     contactSection.innerHTML = `
       <strong>Customer Contact Information</strong>
       <p style="margin-bottom:0;">
