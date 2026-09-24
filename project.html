@@ -427,8 +427,7 @@ if (notificationError) {
       </p>
     `;
   } else {
-    const customer = data.customer;
-
+    const customer = data?.customer || {};
     contactSection.innerHTML = `
       <strong>Customer Contact Information</strong>
 
