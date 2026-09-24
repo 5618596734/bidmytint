@@ -356,25 +356,30 @@ if (contractor.status !== 'approved') {
     return;
   }
 
-  const { error } = await db
-    .from('proposals')
-    .insert({
-      project_id: Number(projectId),
-      contractor_id: contractor.id,
-      proposal_price: Number(price),
-      film_manufacturer: manufacturer,
-      film_product: product,
+ 
+const { data: submitResult, error: submitError } = await db.functions.invoke(
+  'submit-proposal',
+  {
+    body: {
+      projectId: Number(projectId),
+      proposalPrice: Number(price),
+      filmManufacturer: manufacturer,
+      filmProduct: product,
       warranty: warrantyValue,
       availability: availabilityValue,
-      proposal_notes: notes
-    });
-
-  if (error) {
-    console.error(error);
-    alert('There was a problem submitting your proposal. Please try again.');
-    return;
+      proposalNotes: notes
+    }
   }
+);
 
+if (submitError || !submitResult?.success) {
+  console.error('Proposal submission failed:', submitError, submitResult);
+  alert(
+    submitResult?.error ||
+    'There was a problem submitting your proposal. Please try again.'
+  );
+  return;
+}  
   const { error: notificationError } = await db.functions.invoke(
   'notify-customer-proposal',
   {
