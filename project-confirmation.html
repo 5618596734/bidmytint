@@ -201,39 +201,84 @@ const accessToken = params.get('token');
     message.textContent = 'Unable to load project confirmation.';
     return;
   }
+const acceptedProposalId = data.acceptedProposalId;
+const proposals = data.proposals || [];
+const projectStatus = data.projectStatus;
+const winningContractor = data.winningContractor;
 
- const acceptedProposalId = data.acceptedProposalId;
-  const proposals = data.proposals || [];
-
- if (!acceptedProposalId) {
-   document.getElementById('proposalTotal').textContent = '—';
-    message.textContent = 'No selected proposal was found.';
-    return;
-  }
-
-  const selectedProposal = proposals.find(
-    proposal => Number(proposal.id) === Number(acceptedProposalId)
-  );
-
-  if (!selectedProposal) {
-    document.getElementById('proposalTotal').textContent = '—';
-    message.textContent = 'Unable to find the selected proposal.';
-    return;
-  }
-
-  const total = Number(selectedProposal.proposal_price);
-  const confirmationPayment = total * 0.05;
-  const remainingBalance = total - confirmationPayment;
-
-  document.getElementById('proposalTotal').textContent =
-    '$' + total.toFixed(2);
-
-  document.getElementById('confirmationPayment').textContent =
-    '$' + confirmationPayment.toFixed(2);
-
-  document.getElementById('remainingBalance').textContent =
-    '$' + remainingBalance.toFixed(2);
+if (!acceptedProposalId) {
+  document.getElementById('proposalTotal').textContent = '—';
+  message.textContent = 'No selected proposal was found.';
+  return;
 }
+
+const selectedProposal = proposals.find(
+  proposal => Number(proposal.id) === Number(acceptedProposalId)
+);
+
+if (!selectedProposal) {
+  document.getElementById('proposalTotal').textContent = '—';
+  message.textContent = 'Unable to find the selected proposal.';
+  return;
+}
+
+const total = Number(selectedProposal.proposal_price);
+const confirmationPayment = total * 0.05;
+const remainingBalance = total - confirmationPayment;
+
+document.getElementById('proposalTotal').textContent =
+  '$' + total.toFixed(2);
+
+document.getElementById('confirmationPayment').textContent =
+  '$' + confirmationPayment.toFixed(2);
+
+document.getElementById('remainingBalance').textContent =
+  '$' + remainingBalance.toFixed(2);
+
+const button = document.getElementById('paymentButton');
+
+// If Stripe has confirmed payment, do NOT allow another payment.
+if (projectStatus === 'confirmed') {
+  button.disabled = true;
+  button.textContent = '✓ Payment Successful — Project Confirmed';
+
+  message.innerHTML =
+    '<strong>Your confirmation payment was successful.</strong><br>' +
+    'Your project is now confirmed.';
+
+  // Show the winning contractor after payment.
+  if (winningContractor) {
+    const contractorInfo = document.createElement('div');
+    contractorInfo.style.marginTop = '25px';
+    contractorInfo.style.padding = '20px';
+    contractorInfo.style.background = '#f7f7f7';
+    contractorInfo.style.borderRadius = '10px';
+
+    contractorInfo.innerHTML =
+      '<h3>Your Selected Contractor</h3>' +
+      '<p><strong>Company:</strong> ' +
+      (winningContractor.company_name || '—') + '</p>' +
+      '<p><strong>Phone:</strong> ' +
+      (winningContractor.phone || '—') + '</p>' +
+      '<p><strong>Email:</strong> ' +
+      (winningContractor.email || '—') + '</p>' +
+      '<p><strong>Service Area:</strong> ' +
+      (winningContractor.service_area || '—') + '</p>';
+
+    message.appendChild(contractorInfo);
+  }
+
+  return;
+}
+
+// Project has not been paid yet.
+button.disabled = false;
+button.textContent = 'Confirm Project & Pay';
+
+message.textContent =
+  "You will be redirected to Stripe's secure checkout to complete your Project Confirmation Payment.";
+}
+
 async function startCheckout() {
   const button = document.getElementById('paymentButton');
   const message = document.getElementById('message');
@@ -248,12 +293,15 @@ async function startCheckout() {
   message.textContent = 'Connecting to Stripe...';
 
   try {
-    const { data, error } = await db.functions.invoke('create-checkout-session', {
-      body: {
-        projectId: Number(projectId),
-        accessToken: accessToken
+    const { data, error } = await db.functions.invoke(
+      'create-checkout-session',
+      {
+        body: {
+          projectId: Number(projectId),
+          accessToken: accessToken
+        }
       }
-    });
+    );
 
     if (error) {
       console.error(error);
@@ -271,13 +319,19 @@ async function startCheckout() {
     console.error(error);
 
     message.textContent =
-      error.message || 'Unable to start secure checkout. Please try again.';
+      error.message ||
+      'Unable to start secure checkout. Please try again.';
 
     button.disabled = false;
     button.textContent = 'Confirm Project & Pay';
   }
 }
-  loadProjectConfirmation();
+
+document
+  .getElementById('paymentButton')
+  .addEventListener('click', startCheckout);
+
+loadProjectConfirmation(); 
 </script>
 </body>
 </html>
