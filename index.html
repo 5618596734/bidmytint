@@ -19,101 +19,139 @@ html {
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  color: #14233b;
+  color: #172235;
   background: #ffffff;
   line-height: 1.5;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 header {
   position: relative;
-  z-index: 10;
+  z-index: 20;
+  height: 76px;
+  padding: 0 7%;
   background: #07182d;
-  color: white;
-  padding: 18px 7%;
+  color: #ffffff;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
 .logo {
+  position: relative;
   font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -.5px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -.7px;
+  color: #ffffff;
 }
 
 .logo span {
   color: #d6a84b;
 }
 
+.logo::after {
+  content: "WINDOW FILM MARKETPLACE";
+  display: block;
+  margin-top: 6px;
+  font-size: 7px;
+  letter-spacing: 2.4px;
+  color: #aeb9c7;
+  font-weight: 600;
+}
+
 nav {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 32px;
 }
 
 nav a {
-  color: #e8edf4;
+  color: #e7ecf2;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  transition: color .15s ease;
+  transition: color .2s ease;
 }
 
 nav a:hover {
   color: #d6a84b;
 }
 
-/* HERO */
+/* =========================
+   HERO
+========================= */
 
 .hero {
-  min-height: 650px;
+  position: relative;
+  min-height: 620px;
   display: flex;
   align-items: center;
-  padding: 75px 7%;
-  position: relative;
+  padding: 82px 7%;
+  color: #ffffff;
+
   background:
     linear-gradient(
       90deg,
-      rgba(7,24,45,.97) 0%,
-      rgba(7,24,45,.88) 38%,
-      rgba(7,24,45,.50) 68%,
-      rgba(7,24,45,.18) 100%
+      rgba(5,20,38,.98) 0%,
+      rgba(5,20,38,.93) 31%,
+      rgba(5,20,38,.72) 51%,
+      rgba(5,20,38,.25) 76%,
+      rgba(5,20,38,.05) 100%
     ),
-    url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=90');
+    url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=92');
+
   background-size: cover;
   background-position: center;
-  color: white;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 110px;
+  background: linear-gradient(
+    to top,
+    rgba(5,20,38,.30),
+    transparent
+  );
+  pointer-events: none;
 }
 
 .hero-content {
-  max-width: 720px;
+  position: relative;
+  z-index: 2;
+  max-width: 660px;
 }
 
 .eyebrow {
-  color: #e0b65d;
+  color: #d9ad55;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 18px;
+  letter-spacing: 2.7px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 19px;
 }
 
 h1 {
+  max-width: 650px;
   font-size: 58px;
-  line-height: 1.05;
-  letter-spacing: -1.5px;
-  margin-bottom: 22px;
+  line-height: 1.04;
+  letter-spacing: -1.8px;
+  margin-bottom: 23px;
+  font-weight: 800;
 }
 
 .hero p {
-  max-width: 650px;
-  font-size: 19px;
-  line-height: 1.65;
-  color: #e3e9f0;
-  margin-bottom: 30px;
+  max-width: 590px;
+  font-size: 17px;
+  line-height: 1.7;
+  color: #e1e7ed;
+  margin-bottom: 29px;
 }
 
 .primary-button {
@@ -122,141 +160,179 @@ h1 {
   cursor: pointer;
   background: #d6a84b;
   color: #07182d;
-  font-weight: 700;
+  font-weight: 800;
   padding: 16px 28px;
-  border-radius: 7px;
-  font-size: 16px;
+  border-radius: 4px;
+  font-size: 14px;
   text-decoration: none;
-  box-shadow: 0 6px 18px rgba(0,0,0,.15);
-  transition: transform .15s ease, opacity .15s ease;
+  box-shadow: 0 8px 22px rgba(0,0,0,.18);
+  transition: transform .2s ease, background .2s ease;
 }
 
 .primary-button:hover {
-  transform: translateY(-1px);
-  opacity: .95;
+  transform: translateY(-2px);
+  background: #e0b65d;
 }
 
 .subtext {
-  margin-top: 16px;
+  margin-top: 18px;
   margin-bottom: 0 !important;
-  font-size: 13px !important;
-  color: #cbd5df !important;
+  font-size: 12px !important;
+  color: #c7d0da !important;
 }
 
-/* HOW IT WORKS */
+/* =========================
+   HOW IT WORKS
+========================= */
 
 .how {
-  padding: 85px 7%;
+  padding: 82px 7% 88px;
   text-align: center;
   background: #ffffff;
+}
+
+.how::before {
+  content: "HOW IT WORKS";
+  display: block;
+  color: #b18435;
+  font-size: 10px;
+  letter-spacing: 3px;
+  font-weight: 800;
+  margin-bottom: 11px;
 }
 
 .how h2 {
   font-size: 36px;
   color: #07182d;
   margin-bottom: 10px;
-  letter-spacing: -.5px;
+  letter-spacing: -.8px;
 }
 
 .how-intro {
-  color: #687386;
-  margin-bottom: 48px;
-  font-size: 17px;
+  max-width: 650px;
+  margin: 0 auto 48px;
+  color: #758091;
+  font-size: 15px;
 }
 
 .steps {
-  max-width: 1100px;
+  max-width: 1080px;
   margin: auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+  gap: 22px;
 }
 
 .step {
-  padding: 32px 26px;
+  position: relative;
+  padding: 30px 25px;
   background: #ffffff;
-  border: 1px solid #e7eaf0;
-  border-radius: 12px;
+  border: 1px solid #e3e7ec;
+  border-radius: 5px;
+  box-shadow: 0 6px 20px rgba(8,25,45,.04);
 }
 
 .number {
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 19px;
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 18px;
   background: #07182d;
   color: #d6a84b;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 800;
+  font-size: 14px;
 }
 
 .step h3 {
   color: #07182d;
-  margin-bottom: 10px;
-  font-size: 19px;
+  margin-bottom: 9px;
+  font-size: 17px;
 }
 
 .step p {
-  color: #687386;
+  color: #747f8e;
   line-height: 1.65;
-  font-size: 14px;
+  font-size: 13px;
 }
 
-/* TRUST */
+/* =========================
+   TRUST / VALUE SECTION
+========================= */
 
 .trust {
-  background: #f4f6f9;
-  padding: 70px 7%;
+  position: relative;
+  background: #f3f5f7;
+  padding: 74px 7%;
   text-align: center;
-  border-top: 1px solid #e8ebef;
+  border-top: 1px solid #e6e9ed;
+  border-bottom: 1px solid #e6e9ed;
+}
+
+.trust::before {
+  content: "BUILT FOR BETTER DECISIONS";
+  display: block;
+  color: #b18435;
+  font-size: 10px;
+  letter-spacing: 2.6px;
+  font-weight: 800;
+  margin-bottom: 11px;
 }
 
 .trust h2 {
   color: #07182d;
-  font-size: 31px;
-  margin-bottom: 14px;
+  font-size: 32px;
+  margin-bottom: 15px;
+  letter-spacing: -.5px;
 }
 
 .trust p {
-  max-width: 760px;
+  max-width: 790px;
   margin: auto;
-  color: #687386;
-  line-height: 1.7;
-  font-size: 16px;
+  color: #697585;
+  line-height: 1.75;
+  font-size: 15px;
 }
 
-/* PROJECT FORM */
+/* =========================
+   PROJECT FORM
+========================= */
 
 .project-area {
   display: none;
-  background: #f4f6f9;
   min-height: 100vh;
   padding: 55px 20px 80px;
+  background:
+    linear-gradient(
+      135deg,
+      #f3f5f7 0%,
+      #ffffff 50%,
+      #eef1f4 100%
+    );
 }
 
 .form-container {
   max-width: 820px;
   margin: auto;
-  background: white;
-  border-radius: 14px;
+  background: #ffffff;
+  border-radius: 8px;
   padding: 44px;
-  border: 1px solid #e4e8ed;
-  box-shadow: 0 12px 35px rgba(7,24,45,.08);
+  border: 1px solid #e1e5ea;
+  box-shadow: 0 18px 45px rgba(7,24,45,.10);
 }
 
 .progress {
   display: inline-block;
-  color: #8a661d;
+  color: #8b651c;
   background: #f8edcf;
-  padding: 7px 11px;
+  padding: 7px 12px;
   border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 10px;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   margin-bottom: 15px;
 }
 
@@ -267,7 +343,7 @@ h1 {
 }
 
 .intro {
-  color: #687386;
+  color: #697585;
   margin-bottom: 30px;
   line-height: 1.65;
 }
@@ -289,10 +365,10 @@ textarea {
   width: 100%;
   padding: 14px 15px;
   border: 1px solid #ccd3dc;
-  border-radius: 7px;
+  border-radius: 5px;
   font-size: 16px;
   font-family: inherit;
-  background: white;
+  background: #ffffff;
   color: #142033;
   outline: none;
   transition: border-color .15s ease, box-shadow .15s ease;
@@ -318,11 +394,11 @@ textarea {
 
 .option {
   border: 1px solid #d5dbe3;
-  border-radius: 8px;
+  border-radius: 5px;
   padding: 14px;
   font-size: 14px;
   font-weight: 600;
-  background: #fff;
+  background: #ffffff;
   cursor: pointer;
 }
 
@@ -344,7 +420,7 @@ textarea {
   line-height: 1.55;
   color: #596575;
   margin: 20px 0;
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 5px 5px 0;
 }
 
 .form-buttons {
@@ -360,7 +436,7 @@ textarea {
   color: #142033;
   border: 0;
   padding: 14px 24px;
-  border-radius: 7px;
+  border-radius: 5px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -368,10 +444,10 @@ textarea {
 .next {
   margin-left: auto;
   background: #07182d;
-  color: white;
+  color: #ffffff;
   border: 0;
   padding: 14px 27px;
-  border-radius: 7px;
+  border-radius: 5px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -393,26 +469,32 @@ textarea {
   background: #f7f8fa;
   border: 1px solid #e4e8ed;
   padding: 21px;
-  border-radius: 8px;
+  border-radius: 5px;
   line-height: 1.8;
   margin-bottom: 25px;
 }
 
-/* FOOTER */
+/* =========================
+   FOOTER
+========================= */
 
 footer {
-  background: #07182d;
-  color: #aebbc9;
-  padding: 30px 7%;
+  background: #061527;
+  color: #9eabba;
+  padding: 32px 7%;
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
+  border-top: 1px solid rgba(255,255,255,.06);
 }
 
-/* TABLET */
+/* =========================
+   TABLET
+========================= */
 
-@media(max-width: 900px) {
+@media (max-width: 900px) {
+
   h1 {
-    font-size: 49px;
+    font-size: 48px;
   }
 
   .hero {
@@ -420,19 +502,23 @@ footer {
   }
 
   .steps {
-    gap: 18px;
+    gap: 16px;
   }
 }
 
-/* MOBILE */
+/* =========================
+   MOBILE
+========================= */
 
-@media(max-width: 750px) {
+@media (max-width: 750px) {
+
   header {
-    padding: 16px 5%;
+    height: 68px;
+    padding: 0 5%;
   }
 
   .logo {
-    font-size: 24px;
+    font-size: 23px;
   }
 
   nav {
@@ -440,18 +526,18 @@ footer {
   }
 
   .hero {
-    min-height: 570px;
-    padding: 60px 6%;
-    background-position: 62% center;
+    min-height: 600px;
+    padding: 65px 6%;
+    background-position: 64% center;
   }
 
   h1 {
     font-size: 40px;
-    line-height: 1.08;
+    line-height: 1.07;
   }
 
   .hero p {
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .primary-button {
@@ -460,7 +546,7 @@ footer {
   }
 
   .how {
-    padding: 60px 6%;
+    padding: 62px 6%;
   }
 
   .how h2 {
@@ -472,11 +558,11 @@ footer {
   }
 
   .trust {
-    padding: 55px 6%;
+    padding: 58px 6%;
   }
 
   .trust h2 {
-    font-size: 27px;
+    font-size: 28px;
   }
 
   .project-area {
@@ -485,7 +571,6 @@ footer {
 
   .form-container {
     padding: 28px 20px;
-    border-radius: 11px;
   }
 
   .form-container h2 {
@@ -520,12 +605,17 @@ footer {
 
   <nav>
     <a href="#how">How It Works</a>
+    <a href="#compare">Why BidMyTint</a>
     <a href="contractor-login.html">For Contractors</a>
     <a href="contractor-login.html">Contractor Sign In</a>
   </nav>
 </header>
 
+
+<!-- HERO -->
+
 <section class="hero">
+
   <div class="hero-content">
 
     <div class="eyebrow">
@@ -540,7 +630,8 @@ footer {
     <p>
       Submit your project once and receive sealed proposals from
       qualified window film professionals serving your area.
-      Compare pricing, products, warranties and availability before you choose.
+      Compare pricing, products, warranties and availability
+      before you choose.
     </p>
 
     <button class="primary-button" onclick="startProject()">
@@ -548,17 +639,25 @@ footer {
     </button>
 
     <p class="subtext">
-      Free to submit • No obligation • Your contact information stays private
+      ✓ Free to submit &nbsp;&nbsp;
+      ✓ No obligation &nbsp;&nbsp;
+      ✓ Your information stays private
     </p>
 
   </div>
+
 </section>
+
+
+<!-- HOW IT WORKS -->
+
 <section class="how" id="how">
 
-  <h2>How BidMyTint Works</h2>
+  <h2>Simple. Private. Efficient.</h2>
 
   <p class="how-intro">
-    One project submission. Multiple professional proposals. You choose what works best for you.
+    One project submission connects you with qualified window film
+    professionals ready to compete for your project.
   </p>
 
   <div class="steps">
@@ -567,48 +666,111 @@ footer {
       <div class="number">1</div>
       <h3>Tell Us About Your Project</h3>
       <p>
-        Tell us what you need, provide basic project details,
-        and upload photos of your windows or glass.
+        Provide your project details, approximate measurements
+        and photos of the windows or glass.
       </p>
     </div>
 
     <div class="step">
       <div class="number">2</div>
-      <h3>Receive Sealed Proposals</h3>
+      <h3>Professionals Review It</h3>
       <p>
-        Qualified window film professionals review your project
-        and submit private proposals for you to compare.
+        Qualified window film contractors serving your area
+        privately review the project information.
       </p>
     </div>
 
     <div class="step">
       <div class="number">3</div>
+      <h3>Receive Sealed Proposals</h3>
+      <p>
+        Contractors submit private proposals including pricing,
+        film products, warranty and availability.
+      </p>
+    </div>
+
+    <div class="step">
+      <div class="number">4</div>
       <h3>Compare & Choose</h3>
       <p>
-        Compare price, film products, warranty and availability,
-        then select the proposal that fits your project.
+        Review your proposals side by side and choose the
+        solution that works best for your project.
       </p>
     </div>
 
   </div>
+
 </section>
 
-<section class="trust">
+
+<!-- WHY BIDMYTINT -->
+
+<section class="trust" id="compare">
+
   <h2>Compare More Than Just Price</h2>
 
   <p>
-    Whether your project involves heat reduction, UV protection,
-    glare control, privacy, decorative or frosted film, security film,
-    or replacing existing film, BidMyTint helps you compare complete
-    solutions before choosing a professional.
+    Window film projects are about more than the lowest number.
+    Compare film products, performance, warranties, installation
+    details and contractor availability before making your decision.
+    Whether you need heat reduction, UV protection, glare control,
+    privacy, decorative or frosted film, security film, or existing
+    film replacement, BidMyTint helps you compare complete solutions.
   </p>
-</section>
- 
 
-<footer>© 2026 BidMyTint. All rights reserved.</footer>
+</section>
+
+
+<!-- FINAL CTA -->
+
+<section style="
+  background:#07182d;
+  color:white;
+  text-align:center;
+  padding:72px 7%;
+">
+
+  <div style="
+    color:#d6a84b;
+    font-size:10px;
+    letter-spacing:2.5px;
+    font-weight:800;
+    margin-bottom:12px;
+  ">
+    START YOUR PROJECT
+  </div>
+
+  <h2 style="
+    font-size:34px;
+    margin-bottom:14px;
+    letter-spacing:-.5px;
+  ">
+    Ready to Find the Right Window Film Contractor?
+  </h2>
+
+  <p style="
+    max-width:650px;
+    margin:0 auto 27px;
+    color:#cbd4de;
+    font-size:15px;
+    line-height:1.7;
+  ">
+    Tell us about your project once and let qualified professionals
+    compete for your business.
+  </p>
+
+  <button class="primary-button" onclick="startProject()">
+    Start My Project →
+  </button>
+
+</section>
+
+
+<footer>
+  © 2026 BidMyTint. All rights reserved.
+</footer>
 
 </div>
-
 
 <!-- CUSTOMER PROJECT FORM -->
 
