@@ -163,14 +163,12 @@
       contact information will be released.
     </div>
 
-    <button class="payment-button" id="paymentButton" disabled>
-      Confirm Project & Pay
-    </button>
-
-    <div id="message">
-      Secure payment will be available when payment processing is connected.
-    </div>
-
+  <button class="payment-button" id="paymentButton" type="button" onclick="startCheckout()">
+  Confirm Project & Pay
+</button>
+   <div id="message">
+  You will be redirected to Stripe's secure checkout to complete your Project Confirmation Payment.
+</div>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -236,8 +234,50 @@ const accessToken = params.get('token');
   document.getElementById('remainingBalance').textContent =
     '$' + remainingBalance.toFixed(2);
 }
+async function startCheckout() {
+  const button = document.getElementById('paymentButton');
+  const message = document.getElementById('message');
 
-loadProjectConfirmation();
+  if (!projectId || !accessToken) {
+    message.textContent = 'Invalid project confirmation link.';
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = 'Opening Secure Checkout...';
+  message.textContent = 'Connecting to Stripe...';
+
+  try {
+    const { data, error } = await db.functions.invoke('create-checkout-session', {
+      body: {
+        projectId: Number(projectId),
+        accessToken: accessToken
+      }
+    });
+
+    if (error) {
+      console.error(error);
+      throw new Error('Unable to start checkout.');
+    }
+
+    if (!data?.success || !data?.checkoutUrl) {
+      console.error(data);
+      throw new Error(data?.error || 'Unable to start checkout.');
+    }
+
+    window.location.href = data.checkoutUrl;
+
+  } catch (error) {
+    console.error(error);
+
+    message.textContent =
+      error.message || 'Unable to start secure checkout. Please try again.';
+
+    button.disabled = false;
+    button.textContent = 'Confirm Project & Pay';
+  }
+}
+  loadProjectConfirmation();
 </script>
 </body>
 </html>
