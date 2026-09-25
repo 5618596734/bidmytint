@@ -5,155 +5,351 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Contractor Application | BidMyTint</title>
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #07182d;
+  color: #ffffff;
+  min-height: 100vh;
+}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f6f8;
-      color: #172033;
-    }
+header {
+  height: 76px;
+  padding: 0 6%;
+  background: #07182d;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
 
-    header {
-      background: #071b33;
-      color: white;
-      padding: 20px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+.logo {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -.7px;
+}
 
-    .logo {
-      font-size: 26px;
-      font-weight: 700;
-    }
+.logo span {
+  color: #d6a84b;
+}
 
-    .logo span {
-      color: #d4af37;
-    }
+.header-right {
+  color: #d6a84b;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
 
-    .header-right {
-      color: #d4af37;
-      font-weight: 600;
-    }
+.contractor-page {
+  min-height: calc(100vh - 76px);
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+}
 
-    .container {
-      max-width: 650px;
-      margin: 50px auto;
-      padding: 0 20px;
-    }
+.contractor-info {
+  position: relative;
+  padding: 70px 7%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5,20,38,.98) 0%,
+      rgba(5,20,38,.94) 55%,
+      rgba(5,20,38,.78) 100%
+    );
+}
 
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 35px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-    }
+.contractor-info::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 80% 30%, rgba(214,168,75,.10), transparent 35%);
+  pointer-events: none;
+}
 
-    h1 {
-      margin-top: 0;
-      color: #071b33;
-    }
+.info-content {
+  position: relative;
+  z-index: 2;
+  max-width: 650px;
+}
 
-    .intro {
-      color: #5f6877;
-      line-height: 1.6;
-      margin-bottom: 28px;
-    }
+.eyebrow {
+  color: #d6a84b;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
 
-    label {
-      display: block;
-      font-weight: 600;
-      margin-top: 18px;
-      margin-bottom: 7px;
-    }
+.contractor-info h1 {
+  font-size: 48px;
+  line-height: 1.08;
+  letter-spacing: -1.4px;
+  margin-bottom: 20px;
+}
 
-    input {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ccd1d8;
-      border-radius: 7px;
-      font-size: 16px;
-    }
+.contractor-info .intro {
+  color: #d4dce5;
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 590px;
+  margin-bottom: 32px;
+}
 
-    button {
-      width: 100%;
-      margin-top: 28px;
-      padding: 14px;
-      border: none;
-      border-radius: 7px;
-      background: #d4af37;
-      color: #071b33;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-    }
+.benefits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  max-width: 610px;
+}
 
-    .login-link {
-      text-align: center;
-      margin-top: 22px;
-    }
+.benefit {
+  padding: 17px;
+  border: 1px solid rgba(255,255,255,.13);
+  background: rgba(255,255,255,.04);
+  border-radius: 7px;
+}
 
-    .login-link a {
-      color: #071b33;
-      font-weight: 600;
-    }
+.benefit strong {
+  display: block;
+  color: #ffffff;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
 
-    #message {
-      margin-top: 18px;
-      text-align: center;
-      font-weight: 600;
-    }
-  </style>
+.benefit span {
+  color: #aeb9c7;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.check {
+  color: #d6a84b;
+  margin-right: 5px;
+}
+
+.form-side {
+  background: #f4f5f7;
+  padding: 55px 7%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 510px;
+  background: #ffffff;
+  color: #172235;
+  border-radius: 12px;
+  padding: 38px;
+  box-shadow: 0 18px 45px rgba(0,0,0,.15);
+}
+
+.card h2 {
+  color: #07182d;
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.form-intro {
+  color: #6c7786;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  font-weight: 700;
+  font-size: 13px;
+  margin-top: 17px;
+  margin-bottom: 7px;
+  color: #172235;
+}
+
+input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #ccd3dc;
+  border-radius: 6px;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+}
+
+input:focus {
+  border-color: #d6a84b;
+  box-shadow: 0 0 0 3px rgba(214,168,75,.13);
+}
+
+button {
+  width: 100%;
+  margin-top: 25px;
+  padding: 15px;
+  border: 0;
+  border-radius: 6px;
+  background: #d6a84b;
+  color: #07182d;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #e0b65d;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #697585;
+  font-size: 13px;
+}
+
+.login-link a {
+  color: #9a711f;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+#message {
+  margin-top: 16px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+@media (max-width: 850px) {
+  .contractor-page {
+    grid-template-columns: 1fr;
+  }
+
+  .contractor-info {
+    padding: 55px 7%;
+  }
+
+  .contractor-info h1 {
+    font-size: 38px;
+  }
+
+  .form-side {
+    padding: 40px 6%;
+  }
+}
+
+@media (max-width: 550px) {
+  .benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 27px 22px;
+  }
+
+  header {
+    padding: 0 5%;
+  }
+}
+</style>
 </head>
-
 <body>
-
 <header>
   <div class="logo">BidMy<span>Tint</span></div>
-  <div class="header-right">Contractor Network</div>
+  <div class="header-right">CONTRACTOR NETWORK</div>
 </header>
 
-<div class="container">
-  <div class="card">
+<main class="contractor-page">
 
-    <h1>Join the BidMyTint Contractor Network</h1>
+  <section class="contractor-info">
+    <div class="info-content">
 
-    <p class="intro">
-      Create your contractor account to receive qualified architectural
-      window film opportunities in your service area. There are no membership
-      fees and no fees to submit proposals.
-    </p>
+      <div class="eyebrow">BUILT FOR PROFESSIONAL INSTALLERS</div>
 
-    <label for="companyName">Company Name</label>
-    <input type="text" id="companyName">
+      <h1>Join the BidMyTint<br>Contractor Network</h1>
 
-    <label for="phone">Business Phone</label>
-    <input type="tel" id="phone">
+      <p class="intro">
+        Get qualified architectural window film projects in your service area.
+        No membership fees and no fees to submit proposals.
+      </p>
 
-    <label for="serviceArea">Service Area</label>
-    <input type="text" id="serviceArea" placeholder="Example: Broward County, FL">
+      <div class="benefits">
 
-    <label for="email">Email Address</label>
-    <input type="email" id="email">
+        <div class="benefit">
+          <strong><span class="check">✓</span> No Membership Fees</strong>
+          <span>Create your contractor account for free. No monthly or yearly fees.</span>
+        </div>
 
-    <label for="password">Create Password</label>
-    <input type="password" id="password" minlength="6">
+        <div class="benefit">
+          <strong><span class="check">✓</span> No Fees to Submit Proposals</strong>
+          <span>Review opportunities and submit proposals at no cost.</span>
+        </div>
 
-  <button type="button" onclick="submitContractorApplication()">Submit Contractor Application</button>
-    <div id="message"></div>
+        <div class="benefit">
+          <strong><span class="check">✓</span> Qualified Local Projects</strong>
+          <span>Receive architectural window film opportunities in your service area.</span>
+        </div>
 
-    <div class="login-link">
-      Already have an account?
-      <a href="contractor-login.html">Contractor Login</a>
+        <div class="benefit">
+          <strong><span class="check">✓</span> Grow Your Business</strong>
+          <span>Connect with new customers and compete for quality projects.</span>
+        </div>
+
+      </div>
     </div>
+  </section>
 
-  </div>
-</div>
+  <section class="form-side">
+    <div class="card">
+
+      <h2>Create Your Contractor Account</h2>
+
+      <p class="form-intro">
+        Join the BidMyTint network to receive qualified architectural
+        window film opportunities in your service area.
+      </p>
+
+      <label for="companyName">Company Name</label>
+      <input type="text" id="companyName" placeholder="Your Company Name">
+
+      <label for="phone">Business Phone</label>
+      <input type="tel" id="phone" placeholder="(954) 555-1234">
+
+      <label for="serviceArea">Service Area</label>
+      <input type="text" id="serviceArea" placeholder="Example: Broward County, FL">
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="you@yourcompany.com">
+
+      <label for="password">Create Password</label>
+      <input type="password" id="password" minlength="6" placeholder="Create a secure password">
+
+      <button type="button" onclick="submitContractorApplication()">
+        Submit Contractor Application →
+      </button>
+
+      <div id="message"></div>
+
+      <div class="login-link">
+        Already have an account?
+        <a href="contractor-login.html">Contractor Login</a>
+      </div>
+
+    </div>
+  </section>
+
+</main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
