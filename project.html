@@ -33,8 +33,15 @@ header {
 .header-right {
   font-size: 14px;
   color: #d8dee7;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
+.header-right button {
+  margin: 0;
+  padding: 9px 14px;
+}
 .hero {
   background: #07182d;
   color: white;
@@ -109,10 +116,13 @@ button {
 <body>
 <header>
   <div class="logo">BidMy<span>Tint</span></div>
-  <div class="header-right">Contractor Portal</div>
-</header>
 
-<section class="hero">
+  <div class="header-right">
+    <span>Contractor Portal</span>
+    <button type="button" onclick="contractorLogout()">Logout</button>
+  </div>
+</header>
+  <section class="hero">
   <h1>Project Details</h1>
   <p>Review the project information before submitting a sealed proposal.</p>
 </section>
@@ -141,7 +151,11 @@ async function requireContractorLogin() {
 }
 
 requireContractorLogin();  
-function escapeHtml(value) {
+async function contractorLogout() {
+  await db.auth.signOut();
+  window.location.href = 'contractor-login.html';
+}
+  function escapeHtml(value) {
   return String(value ?? '')
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
