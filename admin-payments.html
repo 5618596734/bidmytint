@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BidMyTint | Admin Payments</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f5f7;
+  color: #172235;
+}
+
+header {
+  background: #07182d;
+  color: white;
+  padding: 22px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.logo span {
+  color: #d6a84b;
+}
+
+.admin-label {
+  color: #aeb9c7;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.container {
+  max-width: 1150px;
+  margin: 45px auto;
+  padding: 0 20px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e1e5ea;
+  border-radius: 8px;
+  padding: 28px;
+  box-shadow: 0 8px 25px rgba(7,24,45,.06);
+}
+
+h1 {
+  margin-top: 0;
+  color: #07182d;
+}
+
+.subtitle {
+  color: #697585;
+  margin-bottom: 28px;
+}
+
+.login-box {
+  max-width: 460px;
+  margin: 70px auto;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 7px;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ccd3dc;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+button {
+  border: 0;
+  border-radius: 5px;
+  padding: 13px 20px;
+  background: #d6a84b;
+  color: #07182d;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: .92;
+}
+
+.logout-button {
+  background: transparent;
+  color: white;
+  border: 1px solid #526174;
+  padding: 9px 15px;
+}
+
+#message {
+  margin-top: 18px;
+  color: #697585;
+}
+
+.error {
+  color: #b42318 !important;
+}
+
+.summary {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.summary-box {
+  background: #07182d;
+  color: white;
+  padding: 20px;
+  border-radius: 7px;
+  min-width: 190px;
+}
+
+.summary-box small {
+  display: block;
+  color: #b7c1cc;
+  margin-bottom: 6px;
+}
+
+.summary-box strong {
+  font-size: 24px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  background: #07182d;
+  color: white;
+  padding: 13px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 14px 13px;
+  border-bottom: 1px solid #e5e8ec;
+  font-size: 14px;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: #e7f6ec;
+  color: #18733b;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.stripe-id {
+  font-family: monospace;
+  font-size: 11px;
+  word-break: break-all;
+  color: #5c6675;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  header {
+    padding: 18px 20px;
+  }
+
+  .container {
+    margin-top: 25px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <div class="logo">BidMy<span>Tint</span></div>
+    <div class="admin-label">Administration</div>
+  </div>
+
+  <button
+    id="logoutButton"
+    class="logout-button hidden"
+    onclick="logout()">
+    Sign Out
+  </button>
+</header>
+
+<div class="container">
+
+  <div id="loginSection" class="card login-box">
+    <h1>Admin Sign In</h1>
+
+    <p class="subtitle">
+      Authorized BidMyTint administrators only.
+    </p>
+
+    <div class="field">
+      <label>Email</label>
+      <input id="email" type="email" autocomplete="email">
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <input id="password" type="password" autocomplete="current-password">
+    </div>
+
+    <button onclick="login()">Sign In</button>
+
+    <div id="loginMessage"></div>
+  </div>
+
+
+  <div id="paymentsSection" class="hidden">
+
+    <div class="card">
+
+      <h1>Payment History</h1>
+
+      <p class="subtitle">
+        BidMyTint Project Confirmation Payment records.
+      </p>
+
+      <div class="summary">
+
+        <div class="summary-box">
+          <small>Total Payments</small>
+          <strong id="totalPayments">0</strong>
+        </div>
+
+        <div class="summary-box">
+          <small>Total Collected</small>
+          <strong id="totalCollected">$0.00</strong>
+        </div>
+
+      </div>
+
+      <div class="table-wrap">
+        <table>
+
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Amount</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Stripe Reference</th>
+            </tr>
+          </thead>
+
+          <tbody id="paymentsBody"></tbody>
+
+        </table>
+      </div>
+
+      <div id="paymentsMessage"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+  'https://pkdleiskrqxbouozmquo.supabase.co';
+
+const SUPABASE_KEY =
+  'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
+
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+async function login() {
+
+  const email =
+    document.getElementById('email').value.trim();
+
+  const password =
+    document.getElementById('password').value;
+
+  const message =
+    document.getElementById('loginMessage');
+
+  message.className = '';
+  message.textContent = 'Signing in...';
+
+  const { error } =
+    await db.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if (error) {
+    message.className = 'error';
+    message.textContent =
+      'Unable to sign in. Check your email and password.';
+    return;
+  }
+
+  await showPayments();
+}
+
+
+async function showPayments() {
+
+  const loginSection =
+    document.getElementById('loginSection');
+
+  const paymentsSection =
+    document.getElementById('paymentsSection');
+
+  const logoutButton =
+    document.getElementById('logoutButton');
+
+  const paymentsMessage =
+    document.getElementById('paymentsMessage');
+
+  const { data, error } =
+    await db.functions.invoke(
+      'get-admin-payments'
+    );
+
+  if (error || !data?.success) {
+
+    loginSection.classList.remove('hidden');
+    paymentsSection.classList.add('hidden');
+    logoutButton.classList.add('hidden');
+
+    const message =
+      document.getElementById('loginMessage');
+
+    message.className = 'error';
+    message.textContent =
+      data?.error || 'Administrator access required.';
+
+    return;
+  }
+
+  loginSection.classList.add('hidden');
+  paymentsSection.classList.remove('hidden');
+  logoutButton.classList.remove('hidden');
+
+  const payments = data.payments || [];
+
+  document.getElementById('totalPayments')
+    .textContent = payments.length;
+
+  const total = payments.reduce(
+    (sum, payment) =>
+      sum + Number(payment.amount || 0),
+    0
+  );
+
+  document.getElementById('totalCollected')
+    .textContent =
+      '$' + total.toFixed(2);
+
+  const tbody =
+    document.getElementById('paymentsBody');
+
+  tbody.innerHTML = '';
+
+  if (!payments.length) {
+    paymentsMessage.textContent =
+      'No payment records found.';
+    return;
+  }
+
+  paymentsMessage.textContent = '';
+
+  payments.forEach(payment => {
+
+    const row = document.createElement('tr');
+
+    const date =
+      payment.created_at
+        ? new Date(payment.created_at)
+            .toLocaleString()
+        : '—';
+
+    row.innerHTML = `
+      <td>
+        <strong>#${payment.project_id}</strong>
+      </td>
+
+      <td>
+        <strong>
+          $${Number(payment.amount).toFixed(2)}
+        </strong>
+      </td>
+
+      <td>
+        ${formatPaymentType(payment.payment_type)}
+      </td>
+
+      <td>
+        <span class="status">
+          ${escapeHtml(payment.status || 'Unknown')}
+        </span>
+      </td>
+
+      <td>${escapeHtml(date)}</td>
+
+      <td class="stripe-id">
+        ${escapeHtml(payment.stripe_session_id || '—')}
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+
+
+function formatPaymentType(type) {
+
+  if (type === 'project_confirmation') {
+    return 'Project Confirmation';
+  }
+
+  return type || '—';
+}
+
+
+function escapeHtml(value) {
+
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+
+async function logout() {
+
+  await db.auth.signOut();
+
+  document
+    .getElementById('paymentsSection')
+    .classList.add('hidden');
+
+  document
+    .getElementById('logoutButton')
+    .classList.add('hidden');
+
+  document
+    .getElementById('loginSection')
+    .classList.remove('hidden');
+
+  document
+    .getElementById('loginMessage')
+    .textContent = '';
+
+  document
+    .getElementById('password')
+    .value = '';
+}
+
+
+// If an authenticated session already exists,
+// attempt to load the admin dashboard automatically.
+(async function initialize() {
+
+  const {
+    data: { session }
+  } = await db.auth.getSession();
+
+  if (session) {
+    await showPayments();
+  }
+
+})();
+
+</script>
+
+</body>
+</html>
