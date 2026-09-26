@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BidMyTint | Admin Projects</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f5f7;
+  color: #172235;
+}
+
+header {
+  background: #07182d;
+  color: white;
+  padding: 22px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.logo span {
+  color: #d6a84b;
+}
+
+.admin-label {
+  color: #aeb9c7;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  margin-top: 4px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.header-button {
+  background: transparent;
+  color: white;
+  border: 1px solid #526174;
+  padding: 9px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 45px auto;
+  padding: 0 20px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e1e5ea;
+  border-radius: 8px;
+  padding: 28px;
+  box-shadow: 0 8px 25px rgba(7,24,45,.06);
+}
+
+h1 {
+  margin: 0 0 7px;
+  color: #07182d;
+}
+
+.subtitle {
+  color: #697585;
+  margin: 0 0 28px;
+}
+
+.summary {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.summary-box {
+  background: #07182d;
+  color: white;
+  padding: 18px 22px;
+  border-radius: 7px;
+  min-width: 170px;
+}
+
+.summary-box small {
+  display: block;
+  color: #b7c1cc;
+  margin-bottom: 6px;
+}
+
+.summary-box strong {
+  font-size: 24px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #07182d;
+  color: white;
+  text-align: left;
+  padding: 13px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+td {
+  padding: 14px 13px;
+  border-bottom: 1px solid #e5e8ec;
+  font-size: 13px;
+  vertical-align: top;
+}
+
+.customer-name {
+  font-weight: 700;
+  color: #07182d;
+}
+
+.customer-contact {
+  color: #697585;
+  font-size: 12px;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: #eef1f4;
+  color: #344054;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: capitalize;
+}
+
+.status-paid {
+  background: #e7f6ec;
+  color: #18733b;
+}
+
+.status-unpaid {
+  background: #fff1e7;
+  color: #a14b12;
+}
+
+#message {
+  margin-top: 20px;
+  color: #697585;
+}
+
+.error {
+  color: #b42318 !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  header {
+    padding: 18px 20px;
+  }
+
+  .container {
+    margin-top: 25px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .header-actions {
+    gap: 6px;
+  }
+
+  .header-button {
+    padding: 8px 10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div>
+    <div class="logo">BidMy<span>Tint</span></div>
+    <div class="admin-label">Administration</div>
+  </div>
+
+  <div class="header-actions">
+
+    <a
+      class="header-button"
+      href="admin.html">
+      Dashboard
+    </a>
+
+    <button
+      class="header-button"
+      onclick="logout()">
+      Sign Out
+    </button>
+
+  </div>
+
+</header>
+
+
+<div class="container">
+
+  <div class="card">
+
+    <h1>Projects</h1>
+
+    <p class="subtitle">
+      Review projects submitted through BidMyTint.
+    </p>
+
+    <div class="summary">
+
+      <div class="summary-box">
+        <small>Total Projects</small>
+        <strong id="totalProjects">—</strong>
+      </div>
+
+      <div class="summary-box">
+        <small>Awarded / Confirmed</small>
+        <strong id="awardedProjects">—</strong>
+      </div>
+
+      <div class="summary-box">
+        <small>Paid Projects</small>
+        <strong id="paidProjects">—</strong>
+      </div>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Customer</th>
+            <th>Location</th>
+            <th>Property</th>
+            <th>Project Status</th>
+            <th>Payment</th>
+            <th>Accepted Proposal</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+
+        <tbody id="projectsBody"></tbody>
+
+      </table>
+
+    </div>
+
+    <div id="message">
+      Loading projects...
+    </div>
+
+  </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+  'https://pkdleiskrqxbouozmquo.supabase.co';
+
+const SUPABASE_KEY =
+  'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
+
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+async function loadProjects() {
+
+  const message =
+    document.getElementById('message');
+
+  const {
+    data: { session }
+  } = await db.auth.getSession();
+
+  if (!session) {
+    window.location.href = 'admin.html';
+    return;
+  }
+
+  const { data, error } =
+    await db.functions.invoke(
+      'get-admin-projects'
+    );
+
+  if (error || !data?.success) {
+
+    message.className = 'error';
+
+    message.textContent =
+      data?.error ||
+      'Unable to load projects.';
+
+    return;
+  }
+
+  const projects =
+    data.projects || [];
+
+  document
+    .getElementById('totalProjects')
+    .textContent =
+      projects.length;
+
+
+  const awarded =
+    projects.filter(project =>
+      project.accepted_proposal_id ||
+      project.status === 'awarded' ||
+      project.status === 'confirmed'
+    ).length;
+
+  document
+    .getElementById('awardedProjects')
+    .textContent =
+      awarded;
+
+
+  const paid =
+    projects.filter(project =>
+      project.payment_status === 'paid'
+    ).length;
+
+  document
+    .getElementById('paidProjects')
+    .textContent =
+      paid;
+
+
+  const tbody =
+    document.getElementById('projectsBody');
+
+  tbody.innerHTML = '';
+
+
+  if (!projects.length) {
+
+    message.textContent =
+      'No projects found.';
+
+    return;
+  }
+
+
+  projects.forEach(project => {
+
+    const row =
+      document.createElement('tr');
+
+    const created =
+      project.created_at
+        ? new Date(
+            project.created_at
+          ).toLocaleString()
+        : '—';
+
+
+    const paymentClass =
+      project.payment_status === 'paid'
+        ? 'status status-paid'
+        : 'status status-unpaid';
+
+
+    row.innerHTML = `
+
+      <td>
+        <strong>#${escapeHtml(project.id)}</strong>
+      </td>
+
+
+      <td>
+
+        <div class="customer-name">
+          ${escapeHtml(
+            project.customer_name ||
+            'Not provided'
+          )}
+        </div>
+
+        <div class="customer-contact">
+
+          ${escapeHtml(
+            project.customer_email ||
+            ''
+          )}
+
+          <br>
+
+          ${escapeHtml(
+            project.customer_phone ||
+            ''
+          )}
+
+        </div>
+
+      </td>
+
+
+      <td>
+        ${escapeHtml(project.city || '—')}
+        <br>
+        ${escapeHtml(project.zip_code || '')}
+      </td>
+
+
+      <td>
+        ${escapeHtml(
+          project.property_type || '—'
+        )}
+      </td>
+
+
+      <td>
+        <span class="status">
+          ${escapeHtml(
+            project.status || 'Unknown'
+          )}
+        </span>
+      </td>
+
+
+      <td>
+        <span class="${paymentClass}">
+          ${escapeHtml(
+            project.payment_status ||
+            'unpaid'
+          )}
+        </span>
+      </td>
+
+
+      <td>
+        ${
+          project.accepted_proposal_id
+            ? '#' +
+              escapeHtml(
+                project.accepted_proposal_id
+              )
+            : '—'
+        }
+      </td>
+
+
+      <td>
+        ${escapeHtml(created)}
+      </td>
+
+    `;
+
+    tbody.appendChild(row);
+
+  });
+
+
+  message.textContent = '';
+
+}
+
+
+async function logout() {
+
+  await db.auth.signOut();
+
+  window.location.href =
+    'admin.html';
+
+}
+
+
+function escapeHtml(value) {
+
+  return String(value)
+
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+
+}
+
+
+loadProjects();
+
+</script>
+
+</body>
+</html>
