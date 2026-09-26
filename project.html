@@ -471,17 +471,28 @@ if (notificationError) {
   );
 
   if (error || !data?.success || !data?.customer) {
-    contactSection.innerHTML = `
-      <strong>Customer Contact Information</strong>
-      <p style="margin-bottom:0;">
-        Customer contact information will be released to the winning contractor
-        after the Project Confirmation Payment clears.
-      </p>
-    `;
+  contactSection.innerHTML = `
+    <div style="font-size:18px; font-weight:700; color:#07182d; margin-bottom:8px;">
+      🏆 Project Awarded — Awaiting Customer Confirmation
+    </div>
+
+    <p style="margin:0; color:#687386;">
+      You've been selected for this project. Customer contact information
+      will become available once the customer confirms the project.
+    </p>
+  `;
   } else {
     const customer = data?.customer || {};
     contactSection.innerHTML = `
-      <strong>Customer Contact Information</strong>
+      <div style="font-size:18px; font-weight:700; color:#276738; margin-bottom:6px;">
+  ✓ Project Confirmed — Ready to Contact Customer
+</div>
+
+<p style="margin:0 0 18px; color:#687386;">
+  The customer has confirmed this project. Their contact information is now available below.
+</p>
+
+<strong>Customer Contact Information</strong>
 
       <div class="detail-row">
         <div class="detail-label">Customer</div>
