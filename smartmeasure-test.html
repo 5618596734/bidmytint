@@ -486,8 +486,155 @@ function drawMarkers() {
 
 }
 
+function calculateSmartMeasure() {
 
-function updateInstructions() {
+  if (points.length !== 8) {
+    return;
+  }
+
+  // Points 1–4 = reference paper
+  const ref = points.slice(0, 4);
+
+  // Points 5–8 = window glass
+  const win = points.slice(4, 8);
+
+
+  function distance(a, b) {
+
+    const dx = a.x - b.x;
+    const dy = a.y - b.y;
+
+    return Math.sqrt(
+      dx * dx + dy * dy
+    );
+  }
+
+
+  // Reference paper dimensions in the photo.
+  const refTop =
+    distance(ref[0], ref[1]);
+
+  const refBottom =
+    distance(ref[3], ref[2]);
+
+  const refLeft =
+    distance(ref[0], ref[3]);
+
+  const refRight =
+    distance(ref[1], ref[2]);
+
+
+  const refPhotoWidth =
+    (refTop + refBottom) / 2;
+
+  const refPhotoHeight =
+    (refLeft + refRight) / 2;
+
+
+  // Window dimensions in the photo.
+  const winTop =
+    distance(win[0], win[1]);
+
+  const winBottom =
+    distance(win[3], win[2]);
+
+  const winLeft =
+    distance(win[0], win[3]);
+
+  const winRight =
+    distance(win[1], win[2]);
+
+
+  const winPhotoWidth =
+    (winTop + winBottom) / 2;
+
+  const winPhotoHeight =
+    (winLeft + winRight) / 2;
+
+
+  /*
+    US letter paper is 8.5 x 11 inches.
+
+    Determine whether the paper appears portrait
+    or landscape in the photo.
+  */
+
+  let referenceWidth;
+  let referenceHeight;
+
+  if (refPhotoHeight >= refPhotoWidth) {
+
+    referenceWidth = 8.5;
+    referenceHeight = 11;
+
+  } else {
+
+    referenceWidth = 11;
+    referenceHeight = 8.5;
+
+  }
+
+
+  // Convert photo scale into estimated inches.
+  const widthScale =
+    referenceWidth / refPhotoWidth;
+
+  const heightScale =
+    referenceHeight / refPhotoHeight;
+
+
+  const estimatedWidth =
+    winPhotoWidth * widthScale;
+
+  const estimatedHeight =
+    winPhotoHeight * heightScale;
+
+
+  const squareFeet =
+    (estimatedWidth * estimatedHeight) / 144;
+
+
+  document
+    .getElementById('result')
+    .innerHTML = `
+
+      <div class="result-title">
+        SmartMeasure Estimated Glass Size
+      </div>
+
+      <p style="
+        font-size:28px;
+        font-weight:800;
+        color:#07182d;
+        margin-bottom:8px;
+      ">
+        ${estimatedWidth.toFixed(1)}"
+        W ×
+        ${estimatedHeight.toFixed(1)}"
+        H
+      </p>
+
+      <p>
+        Estimated glass area:
+        <strong>
+          ${squareFeet.toFixed(2)} sq. ft.
+        </strong>
+      </p>
+
+      <div class="warning">
+        SmartMeasure dimensions are estimates for
+        quoting purposes. Final measurements should
+        be verified by the contractor before film
+        is ordered or cut.
+      </div>
+
+    `;
+
+  result.style.display =
+    'block';
+
+}
+  function updateInstructions() {
 
   if (points.length < 4) {
 
@@ -546,27 +693,22 @@ function updateInstructions() {
     return;
   }
 
+currentInstruction.innerHTML = `
 
-  if (points.length === 8) {
+    <div class="step-title">
+      ✓ All points captured
+    </div>
 
-    currentInstruction.innerHTML = `
+    <div class="step-text">
+      SmartMeasure is calculating the
+      estimated window dimensions.
+    </div>
 
-      <div class="step-title">
-        ✓ All points captured
-      </div>
+  `;
 
-      <div class="step-text">
-        The reference sheet and window glass
-        have both been marked.
-      </div>
+  calculateSmartMeasure();
 
-    `;
-
-    result.style.display =
-      'block';
-
-  }
-
+}
 }
 
 
