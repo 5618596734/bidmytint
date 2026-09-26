@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BidMyTint | Admin Contractors</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f5f7;
+  color: #172235;
+}
+
+header {
+  background: #07182d;
+  color: white;
+  padding: 22px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.logo span { color: #d6a84b; }
+
+.admin-label {
+  color: #aeb9c7;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  margin-top: 4px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.header-button {
+  background: transparent;
+  color: white;
+  border: 1px solid #526174;
+  padding: 9px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 45px auto;
+  padding: 0 20px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e1e5ea;
+  border-radius: 8px;
+  padding: 28px;
+  box-shadow: 0 8px 25px rgba(7,24,45,.06);
+}
+
+h1 {
+  margin: 0 0 7px;
+  color: #07182d;
+}
+
+.subtitle {
+  color: #697585;
+  margin: 0 0 28px;
+}
+
+.summary {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.summary-box {
+  background: #07182d;
+  color: white;
+  padding: 18px 22px;
+  border-radius: 7px;
+  min-width: 170px;
+}
+
+.summary-box small {
+  display: block;
+  color: #b7c1cc;
+  margin-bottom: 6px;
+}
+
+.summary-box strong {
+  font-size: 24px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #07182d;
+  color: white;
+  text-align: left;
+  padding: 13px;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 14px 13px;
+  border-bottom: 1px solid #e5e8ec;
+  font-size: 13px;
+  vertical-align: top;
+}
+
+.contractor-name {
+  font-weight: 700;
+  color: #07182d;
+}
+
+.contact {
+  color: #697585;
+  font-size: 12px;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: capitalize;
+}
+
+.approved {
+  background: #e7f6ec;
+  color: #18733b;
+}
+
+.pending {
+  background: #fff1e7;
+  color: #a14b12;
+}
+
+.other {
+  background: #eef1f4;
+  color: #344054;
+}
+
+#message {
+  margin-top: 20px;
+  color: #697585;
+}
+
+.error {
+  color: #b42318 !important;
+}
+
+@media (max-width: 700px) {
+  header {
+    padding: 18px 20px;
+  }
+
+  .container {
+    margin-top: 25px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div>
+    <div class="logo">BidMy<span>Tint</span></div>
+    <div class="admin-label">Administration</div>
+  </div>
+
+  <div class="header-actions">
+
+    <a class="header-button" href="admin.html">
+      Dashboard
+    </a>
+
+    <button class="header-button" onclick="logout()">
+      Sign Out
+    </button>
+
+  </div>
+
+</header>
+
+<div class="container">
+
+  <div class="card">
+
+    <h1>Contractors</h1>
+
+    <p class="subtitle">
+      Review contractor accounts registered with BidMyTint.
+    </p>
+
+    <div class="summary">
+
+      <div class="summary-box">
+        <small>Total Contractors</small>
+        <strong id="totalContractors">—</strong>
+      </div>
+
+      <div class="summary-box">
+        <small>Approved</small>
+        <strong id="approvedContractors">—</strong>
+      </div>
+
+      <div class="summary-box">
+        <small>Pending</small>
+        <strong id="pendingContractors">—</strong>
+      </div>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Contractor / Company</th>
+            <th>Contact</th>
+            <th>Service Area</th>
+            <th>Status</th>
+            <th>Registered</th>
+          </tr>
+        </thead>
+
+        <tbody id="contractorsBody"></tbody>
+
+      </table>
+
+    </div>
+
+    <div id="message">
+      Loading contractors...
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+  'https://pkdleiskrqxbouozmquo.supabase.co';
+
+const SUPABASE_KEY =
+  'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
+
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+async function loadContractors() {
+
+  const message =
+    document.getElementById('message');
+
+  const {
+    data: { session }
+  } = await db.auth.getSession();
+
+  if (!session) {
+    window.location.href = 'admin.html';
+    return;
+  }
+
+  const { data, error } =
+    await db.functions.invoke(
+      'get-admin-contractors'
+    );
+
+  if (error || !data?.success) {
+    message.className = 'error';
+    message.textContent =
+      data?.error ||
+      'Unable to load contractors.';
+    return;
+  }
+
+  const contractors =
+    data.contractors || [];
+
+  document
+    .getElementById('totalContractors')
+    .textContent = contractors.length;
+
+  const approved =
+    contractors.filter(contractor =>
+      String(contractor.status || '')
+        .toLowerCase() === 'approved'
+    ).length;
+
+  const pending =
+    contractors.filter(contractor =>
+      String(contractor.status || '')
+        .toLowerCase() === 'pending'
+    ).length;
+
+  document
+    .getElementById('approvedContractors')
+    .textContent = approved;
+
+  document
+    .getElementById('pendingContractors')
+    .textContent = pending;
+
+  const tbody =
+    document.getElementById('contractorsBody');
+
+  tbody.innerHTML = '';
+
+  if (!contractors.length) {
+    message.textContent =
+      'No contractor accounts found.';
+    return;
+  }
+
+  contractors.forEach(contractor => {
+
+    const row =
+      document.createElement('tr');
+
+    const status =
+      contractor.status || 'Unknown';
+
+    const statusLower =
+      String(status).toLowerCase();
+
+    let statusClass = 'status other';
+
+    if (statusLower === 'approved') {
+      statusClass = 'status approved';
+    }
+
+    if (statusLower === 'pending') {
+      statusClass = 'status pending';
+    }
+
+    const name =
+      contractor.company_name ||
+      contractor.business_name ||
+      contractor.name ||
+      contractor.full_name ||
+      'Contractor';
+
+    const email =
+      contractor.email ||
+      contractor.contact_email ||
+      '';
+
+    const phone =
+      contractor.phone ||
+      contractor.contact_phone ||
+      '';
+
+    const serviceArea =
+      contractor.service_area ||
+      contractor.city ||
+      contractor.zip_code ||
+      '—';
+
+    const created =
+      contractor.created_at
+        ? new Date(
+            contractor.created_at
+          ).toLocaleString()
+        : '—';
+
+    row.innerHTML = `
+
+      <td>
+        <strong>
+          ${escapeHtml(contractor.id || '—')}
+        </strong>
+      </td>
+
+      <td>
+        <div class="contractor-name">
+          ${escapeHtml(name)}
+        </div>
+      </td>
+
+      <td>
+        <div class="contact">
+          ${escapeHtml(email)}
+          ${email && phone ? '<br>' : ''}
+          ${escapeHtml(phone)}
+        </div>
+      </td>
+
+      <td>
+        ${escapeHtml(serviceArea)}
+      </td>
+
+      <td>
+        <span class="${statusClass}">
+          ${escapeHtml(status)}
+        </span>
+      </td>
+
+      <td>
+        ${escapeHtml(created)}
+      </td>
+
+    `;
+
+    tbody.appendChild(row);
+
+  });
+
+  message.textContent = '';
+}
+
+
+async function logout() {
+
+  await db.auth.signOut();
+
+  window.location.href =
+    'admin.html';
+}
+
+
+function escapeHtml(value) {
+
+  return String(value)
+
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+
+}
+
+
+loadContractors();
+
+</script>
+
+</body>
+</html>
