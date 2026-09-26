@@ -492,14 +492,25 @@ function calculateSmartMeasure() {
     return;
   }
 
-  // Points 1–4 = reference paper
   const ref = points.slice(0, 4);
-
-  // Points 5–8 = window glass
   const win = points.slice(4, 8);
 
+  /*
+    SmartMeasure Perspective Calibration
 
-  function distance(a, b) {
+    Points 1–4 are the four corners of a known
+    US letter-size sheet.
+
+    Points 5–8 are the four corners of the glass.
+
+    We calculate a projective transformation from
+    photo coordinates into real-world inches.
+  */
+
+
+  // Determine paper orientation from the clicked points.
+
+  function dist(a, b) {
 
     const dx = a.x - b.x;
     const dy = a.y - b.y;
@@ -510,88 +521,287 @@ function calculateSmartMeasure() {
   }
 
 
-  // Reference paper dimensions in the photo.
-  const refTop =
-    distance(ref[0], ref[1]);
+  const paperPhotoWidth =
+    (
+      dist(ref[0], ref[1]) +
+      dist(ref[3], ref[2])
+    ) / 2;
 
-  const refBottom =
-    distance(ref[3], ref[2]);
-
-  const refLeft =
-    distance(ref[0], ref[3]);
-
-  const refRight =
-    distance(ref[1], ref[2]);
-
-
-  const refPhotoWidth =
-    (refTop + refBottom) / 2;
-
-  const refPhotoHeight =
-    (refLeft + refRight) / 2;
+  const paperPhotoHeight =
+    (
+      dist(ref[0], ref[3]) +
+      dist(ref[1], ref[2])
+    ) / 2;
 
 
-  // Window dimensions in the photo.
-  const winTop =
-    distance(win[0], win[1]);
-
-  const winBottom =
-    distance(win[3], win[2]);
-
-  const winLeft =
-    distance(win[0], win[3]);
-
-  const winRight =
-    distance(win[1], win[2]);
+  let paperWidth;
+  let paperHeight;
 
 
-  const winPhotoWidth =
-    (winTop + winBottom) / 2;
+  if (paperPhotoHeight >= paperPhotoWidth) {
 
-  const winPhotoHeight =
-    (winLeft + winRight) / 2;
-
-
-  /*
-    US letter paper is 8.5 x 11 inches.
-
-    Determine whether the paper appears portrait
-    or landscape in the photo.
-  */
-
-  let referenceWidth;
-  let referenceHeight;
-
-  if (refPhotoHeight >= refPhotoWidth) {
-
-    referenceWidth = 8.5;
-    referenceHeight = 11;
+    // Portrait letter paper
+    paperWidth = 8.5;
+    paperHeight = 11;
 
   } else {
 
-    referenceWidth = 11;
-    referenceHeight = 8.5;
+    // Landscape letter paper
+    paperWidth = 11;
+    paperHeight = 8.5;
 
   }
 
 
-  // Convert photo scale into estimated inches.
-  const widthScale =
-    referenceWidth / refPhotoWidth;
+  /*
+    Solve an 8-variable homography.
 
-  const heightScale =
-    referenceHeight / refPhotoHeight;
+    Photo coordinate (x,y) becomes real-world
+    coordinate (X,Y):
+
+    X = (a*x + b*y + c) /
+        (g*x + h*y + 1)
+
+    Y = (d*x + e*y + f) /
+        (g*x + h*y + 1)
+  */
+
+
+  const destination = [
+
+    { x: 0,          y: 0 },
+
+    { x: paperWidth, y: 0 },
+
+    { x: paperWidth, y: paperHeight },
+
+    { x: 0,          y: paperHeight }
+
+  ];
+
+
+  const A = [];
+  const B = [];
+
+
+  for (let i = 0; i < 4; i++) {
+
+    const x = ref[i].x;
+    const y = ref[i].y;
+
+    const X = destination[i].x;
+    const Y = destination[i].y;
+
+
+    A.push([
+      x, y, 1,
+      0, 0, 0,
+      -X * x,
+      -X * y
+    ]);
+
+    B.push(X);
+
+
+    A.push([
+      0, 0, 0,
+      x, y, 1,
+      -Y * x,
+      -Y * y
+    ]);
+
+    B.push(Y);
+
+  }
+
+
+  function solveLinearSystem(matrix, values) {
+
+    const n = values.length;
+
+    const augmented =
+      matrix.map(
+        (row, i) =>
+          row.slice().concat(values[i])
+      );
+
+
+    for (let i = 0; i < n; i++) {
+
+      let maxRow = i;
+
+      for (let k = i + 1; k < n; k++) {
+
+        if (
+          Math.abs(augmented[k][i]) >
+          Math.abs(augmented[maxRow][i])
+        ) {
+          maxRow = k;
+        }
+
+      }
+
+
+      const temp =
+        augmented[i];
+
+      augmented[i] =
+        augmented[maxRow];
+
+      augmented[maxRow] =
+        temp;
+
+
+      const pivot =
+        augmented[i][i];
+
+
+      if (Math.abs(pivot) < 1e-12) {
+        return null;
+      }
+
+
+      for (let j = i; j <= n; j++) {
+
+        augmented[i][j] /=
+          pivot;
+
+      }
+
+
+      for (let k = 0; k < n; k++) {
+
+        if (k === i) {
+          continue;
+        }
+
+
+        const factor =
+          augmented[k][i];
+
+
+        for (let j = i; j <= n; j++) {
+
+          augmented[k][j] -=
+            factor *
+            augmented[i][j];
+
+        }
+
+      }
+
+    }
+
+
+    return augmented.map(
+      row => row[n]
+    );
+
+  }
+
+
+  const h =
+    solveLinearSystem(A, B);
+
+
+  if (!h) {
+
+    document
+      .getElementById('result')
+      .innerHTML = `
+
+        <div class="result-title">
+          SmartMeasure could not calculate
+          this photo.
+        </div>
+
+        <p>
+          Please try marking the corners again.
+        </p>
+
+      `;
+
+    result.style.display =
+      'block';
+
+    return;
+
+  }
+
+
+  function transformPoint(point) {
+
+    const x = point.x;
+    const y = point.y;
+
+    const denominator =
+      h[6] * x +
+      h[7] * y +
+      1;
+
+
+    return {
+
+      x:
+        (
+          h[0] * x +
+          h[1] * y +
+          h[2]
+        ) / denominator,
+
+      y:
+        (
+          h[3] * x +
+          h[4] * y +
+          h[5]
+        ) / denominator
+
+    };
+
+  }
+
+
+  const correctedWindow =
+    win.map(transformPoint);
+
+
+  const topWidth =
+    dist(
+      correctedWindow[0],
+      correctedWindow[1]
+    );
+
+  const bottomWidth =
+    dist(
+      correctedWindow[3],
+      correctedWindow[2]
+    );
+
+  const leftHeight =
+    dist(
+      correctedWindow[0],
+      correctedWindow[3]
+    );
+
+  const rightHeight =
+    dist(
+      correctedWindow[1],
+      correctedWindow[2]
+    );
 
 
   const estimatedWidth =
-    winPhotoWidth * widthScale;
+    (topWidth + bottomWidth) / 2;
 
   const estimatedHeight =
-    winPhotoHeight * heightScale;
+    (leftHeight + rightHeight) / 2;
 
 
   const squareFeet =
-    (estimatedWidth * estimatedHeight) / 144;
+    (
+      estimatedWidth *
+      estimatedHeight
+    ) / 144;
 
 
   document
@@ -608,34 +818,41 @@ function calculateSmartMeasure() {
         color:#07182d;
         margin-bottom:8px;
       ">
+
         ${estimatedWidth.toFixed(1)}"
         W ×
         ${estimatedHeight.toFixed(1)}"
         H
+
       </p>
 
       <p>
         Estimated glass area:
         <strong>
-          ${squareFeet.toFixed(2)} sq. ft.
+          ${squareFeet.toFixed(2)}
+          sq. ft.
         </strong>
       </p>
 
       <div class="warning">
-        SmartMeasure dimensions are estimates for
-        quoting purposes. Final measurements should
-        be verified by the contractor before film
-        is ordered or cut.
+
+        SmartMeasure dimensions are estimates
+        for quoting purposes.
+
+        Final measurements should be verified
+        by the contractor before film is
+        ordered or cut.
+
       </div>
 
     `;
+
 
   result.style.display =
     'block';
 
 }
-  function updateInstructions() {
-
+function updateInstructions() {
   if (points.length < 4) {
 
     currentInstruction.innerHTML = `
