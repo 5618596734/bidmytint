@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BidMyTint SmartMeasure | Private Test</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f5f7;
+  color: #172235;
+}
+
+header {
+  background: #07182d;
+  color: white;
+  padding: 22px 6%;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.logo span {
+  color: #d6a84b;
+}
+
+.beta {
+  color: #aeb9c7;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 4px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px 50px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e1e5ea;
+  border-radius: 9px;
+  padding: 28px;
+  box-shadow: 0 8px 25px rgba(7,24,45,.06);
+  margin-bottom: 22px;
+}
+
+h1, h2 {
+  color: #07182d;
+}
+
+h1 {
+  margin-top: 0;
+}
+
+.subtitle {
+  color: #697585;
+  line-height: 1.6;
+}
+
+.instructions {
+  background: #fffaf0;
+  border-left: 4px solid #d6a84b;
+  padding: 18px;
+  margin: 22px 0;
+  line-height: 1.7;
+}
+
+.upload-box {
+  border: 2px dashed #cbd3dc;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  background: #fafbfc;
+}
+
+input[type="file"] {
+  margin-top: 15px;
+}
+
+#imageArea {
+  display: none;
+}
+
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 20px;
+  background: #111;
+  overflow: hidden;
+  border-radius: 8px;
+  line-height: 0;
+}
+
+#windowImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: crosshair;
+}
+
+#markerLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.marker {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  margin-top: -12px;
+  border-radius: 50%;
+  background: #d6a84b;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #07182d;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.step {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid #e1e5ea;
+  border-radius: 7px;
+}
+
+.step-title {
+  font-weight: 800;
+  color: #07182d;
+  margin-bottom: 8px;
+}
+
+.step-text {
+  color: #697585;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.progress {
+  margin-top: 15px;
+  font-weight: 700;
+  color: #9b711f;
+}
+
+button {
+  border: 0;
+  border-radius: 5px;
+  padding: 12px 18px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 14px;
+}
+
+.primary {
+  background: #d6a84b;
+  color: #07182d;
+}
+
+.secondary {
+  background: #07182d;
+  color: white;
+  margin-left: 8px;
+}
+
+.result {
+  display: none;
+  background: #eaf7ee;
+  border: 1px solid #c8e7d1;
+  border-radius: 8px;
+  padding: 22px;
+  margin-top: 22px;
+}
+
+.result-title {
+  font-weight: 800;
+  color: #176b38;
+  font-size: 20px;
+}
+
+.warning {
+  font-size: 12px;
+  color: #697585;
+  margin-top: 15px;
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 20px;
+  }
+
+  .secondary {
+    margin-left: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    BidMy<span>Tint</span> SmartMeasure
+  </div>
+
+  <div class="beta">
+    Private Prototype • Beta
+  </div>
+</header>
+
+
+<div class="container">
+
+  <div class="card">
+
+    <h1>SmartMeasure Test</h1>
+
+    <p class="subtitle">
+      Estimate window dimensions from a photo using
+      one known-size reference.
+    </p>
+
+    <div class="instructions">
+
+      <strong>For this first test:</strong><br><br>
+
+      1. Use ONE standard US letter-size sheet of paper
+      (8.5 × 11 inches).<br>
+
+      2. Place the sheet flat against an accessible
+      window.<br>
+
+      3. Make sure the entire sheet and the entire
+      window glass are visible in the photo.<br>
+
+      4. Take the picture as straight-on as reasonably
+      possible.<br><br>
+
+      <strong>
+        Never climb or reach an unsafe window for this test.
+      </strong>
+
+    </div>
+
+
+    <div class="upload-box">
+
+      <strong>Upload or Take a Window Photo</strong>
+
+      <br>
+
+      <span class="subtitle">
+        JPG, PNG, or phone camera photo
+      </span>
+
+      <br>
+
+      <input
+        type="file"
+        id="photoInput"
+        accept="image/*">
+
+    </div>
+
+  </div>
+
+
+  <div id="imageArea" class="card">
+
+    <h2>Mark Your Photo</h2>
+
+
+    <div id="currentInstruction" class="step">
+
+      <div class="step-title">
+        Step 1 — Mark the reference sheet
+      </div>
+
+      <div class="step-text">
+        Click the FOUR corners of the single
+        8.5 × 11-inch sheet in this order:
+        <strong>
+          top-left → top-right → bottom-right → bottom-left.
+        </strong>
+      </div>
+
+      <div id="progress" class="progress">
+        Reference points: 0 / 4
+      </div>
+
+    </div>
+
+
+    <div class="image-wrapper">
+
+      <img
+        id="windowImage"
+        alt="Window photo">
+
+      <div id="markerLayer"></div>
+
+    </div>
+
+
+    <button
+      class="primary"
+      onclick="undoPoint()">
+      Undo Last Point
+    </button>
+
+    <button
+      class="secondary"
+      onclick="resetPoints()">
+      Start Over
+    </button>
+
+
+    <div id="result" class="result">
+
+      <div class="result-title">
+        ✓ Photo Marking Complete
+      </div>
+
+      <p>
+        SmartMeasure successfully captured the
+        reference sheet and window glass points.
+      </p>
+
+      <strong>
+        8 measurement points captured.
+      </strong>
+
+      <div class="warning">
+        The actual dimension calculation will be added
+        after we verify this photo-marking system works
+        correctly on your test photo.
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const photoInput =
+  document.getElementById('photoInput');
+
+const imageArea =
+  document.getElementById('imageArea');
+
+const windowImage =
+  document.getElementById('windowImage');
+
+const markerLayer =
+  document.getElementById('markerLayer');
+
+const currentInstruction =
+  document.getElementById('currentInstruction');
+
+const result =
+  document.getElementById('result');
+
+
+let points = [];
+
+
+photoInput.addEventListener(
+  'change',
+  function(event) {
+
+    const file =
+      event.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    const reader =
+      new FileReader();
+
+    reader.onload =
+      function(e) {
+
+        windowImage.src =
+          e.target.result;
+
+        imageArea.style.display =
+          'block';
+
+        resetPoints();
+
+        setTimeout(() => {
+          imageArea.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }, 100);
+
+      };
+
+    reader.readAsDataURL(file);
+
+  }
+);
+
+
+windowImage.addEventListener(
+  'click',
+  function(event) {
+
+    if (points.length >= 8) {
+      return;
+    }
+
+    const rect =
+      windowImage.getBoundingClientRect();
+
+    const x =
+      (event.clientX - rect.left)
+      / rect.width;
+
+    const y =
+      (event.clientY - rect.top)
+      / rect.height;
+
+    points.push({
+      x: x,
+      y: y
+    });
+
+    drawMarkers();
+
+    updateInstructions();
+
+  }
+);
+
+
+function drawMarkers() {
+
+  markerLayer.innerHTML = '';
+
+  points.forEach(
+    (point, index) => {
+
+      const marker =
+        document.createElement('div');
+
+      marker.className =
+        'marker';
+
+      marker.style.left =
+        (point.x * 100) + '%';
+
+      marker.style.top =
+        (point.y * 100) + '%';
+
+      marker.textContent =
+        index + 1;
+
+      markerLayer.appendChild(
+        marker
+      );
+
+    }
+  );
+
+}
+
+
+function updateInstructions() {
+
+  if (points.length < 4) {
+
+    currentInstruction.innerHTML = `
+
+      <div class="step-title">
+        Step 1 — Mark the reference sheet
+      </div>
+
+      <div class="step-text">
+        Click the FOUR corners of the single
+        8.5 × 11-inch sheet in this order:
+        <strong>
+          top-left → top-right → bottom-right → bottom-left.
+        </strong>
+      </div>
+
+      <div class="progress">
+        Reference points:
+        ${points.length} / 4
+      </div>
+
+    `;
+
+    return;
+  }
+
+
+  if (points.length >= 4 &&
+      points.length < 8) {
+
+    const windowPoints =
+      points.length - 4;
+
+    currentInstruction.innerHTML = `
+
+      <div class="step-title">
+        Step 2 — Mark the window glass
+      </div>
+
+      <div class="step-text">
+        Now click the FOUR corners of the
+        window glass in the same order:
+        <strong>
+          top-left → top-right → bottom-right → bottom-left.
+        </strong>
+      </div>
+
+      <div class="progress">
+        Window points:
+        ${windowPoints} / 4
+      </div>
+
+    `;
+
+    return;
+  }
+
+
+  if (points.length === 8) {
+
+    currentInstruction.innerHTML = `
+
+      <div class="step-title">
+        ✓ All points captured
+      </div>
+
+      <div class="step-text">
+        The reference sheet and window glass
+        have both been marked.
+      </div>
+
+    `;
+
+    result.style.display =
+      'block';
+
+  }
+
+}
+
+
+function undoPoint() {
+
+  if (!points.length) {
+    return;
+  }
+
+  points.pop();
+
+  result.style.display =
+    'none';
+
+  drawMarkers();
+
+  updateInstructions();
+
+}
+
+
+function resetPoints() {
+
+  points = [];
+
+  result.style.display =
+    'none';
+
+  drawMarkers();
+
+  updateInstructions();
+
+}
+
+</script>
+
+</body>
+</html>
