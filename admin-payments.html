@@ -224,7 +224,7 @@ td {
 
 <div class="container">
 
-  <div id="loginSection" class="card login-box">
+  <div id="loginSection" class="card login-box hidden">
     <h1>Admin Sign In</h1>
 
     <p class="subtitle">
@@ -503,20 +503,33 @@ async function logout() {
 }
 
 
-// If an authenticated session already exists,
-// attempt to load the admin dashboard automatically.
+// Require an authenticated administrator session.
 (async function initialize() {
 
   const {
     data: { session }
   } = await db.auth.getSession();
 
-  if (session) {
-    await showPayments();
+  if (!session) {
+    window.location.href = 'admin-login.html';
+    return;
   }
 
-})();
+  const { data, error } =
+    await db.functions.invoke(
+      'get-admin-payments'
+    );
 
+  if (error || !data?.success) {
+    await db.auth.signOut();
+    window.location.href = 'admin-login.html';
+    return;
+  }
+
+  await showPayments();
+
+})();
+  
 </script>
 
 </body>
