@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BidMyTint | Admin Portal</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f5f7;
+  color: #172235;
+}
+
+header {
+  background: #07182d;
+  color: white;
+  padding: 22px 6%;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.logo span {
+  color: #d6a84b;
+}
+
+.admin-label {
+  color: #aeb9c7;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  margin-top: 4px;
+}
+
+.container {
+  max-width: 460px;
+  margin: 80px auto;
+  padding: 0 20px;
+}
+
+.login-card {
+  background: white;
+  border: 1px solid #e1e5ea;
+  border-radius: 8px;
+  padding: 32px;
+  box-shadow: 0 8px 25px rgba(7,24,45,.06);
+}
+
+h1 {
+  margin: 0 0 8px;
+  color: #07182d;
+}
+
+.subtitle {
+  color: #697585;
+  margin: 0 0 28px;
+  line-height: 1.5;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 7px;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ccd3dc;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.primary-button {
+  width: 100%;
+  border: 0;
+  border-radius: 5px;
+  padding: 14px 20px;
+  background: #d6a84b;
+  color: #07182d;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  opacity: .92;
+}
+
+#loginMessage {
+  margin-top: 18px;
+  line-height: 1.5;
+}
+
+.error {
+  color: #b42318;
+}
+
+.security-note {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e6e9ee;
+  color: #7a8493;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .container {
+    margin: 45px auto;
+  }
+
+  .login-card {
+    padding: 25px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">BidMy<span>Tint</span></div>
+  <div class="admin-label">Administration</div>
+</header>
+
+<main class="container">
+
+  <div class="login-card">
+
+    <h1>Admin Portal</h1>
+
+    <p class="subtitle">
+      Sign in to manage BidMyTint projects, payments,
+      contractors and customers.
+    </p>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        autocomplete="email">
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password">
+    </div>
+
+    <button
+      id="loginButton"
+      class="primary-button"
+      type="button"
+      onclick="login()">
+      Sign In to Admin Portal
+    </button>
+
+    <div id="loginMessage"></div>
+
+    <div class="security-note">
+      Authorized BidMyTint administrators only.
+    </div>
+
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+  'https://pkdleiskrqxbouozmquo.supabase.co';
+
+const SUPABASE_KEY =
+  'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
+
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+async function login() {
+
+  const email =
+    document.getElementById('email').value.trim();
+
+  const password =
+    document.getElementById('password').value;
+
+  const message =
+    document.getElementById('loginMessage');
+
+  const button =
+    document.getElementById('loginButton');
+
+  message.className = '';
+  message.textContent = '';
+
+  if (!email || !password) {
+    message.className = 'error';
+    message.textContent =
+      'Enter your administrator email and password.';
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = 'Signing in...';
+
+  const { error } =
+    await db.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if (error) {
+
+    message.className = 'error';
+    message.textContent =
+      'Unable to sign in. Check your email and password.';
+
+    button.disabled = false;
+    button.textContent = 'Sign In to Admin Portal';
+
+    return;
+  }
+
+  await verifyAdmin();
+}
+
+
+async function verifyAdmin() {
+
+  const message =
+    document.getElementById('loginMessage');
+
+  const button =
+    document.getElementById('loginButton');
+
+  const { data, error } =
+    await db.functions.invoke(
+      'get-admin-payments'
+    );
+
+  if (error || !data?.success) {
+
+    await db.auth.signOut();
+
+    message.className = 'error';
+    message.textContent =
+      data?.error || 'Administrator access required.';
+
+    button.disabled = false;
+    button.textContent = 'Sign In to Admin Portal';
+
+    return;
+  }
+
+  window.location.href = 'admin.html';
+}
+
+
+// If an authorized administrator already has
+// an active session, go directly to the dashboard.
+
+(async function initialize() {
+
+  const {
+    data: { session }
+  } = await db.auth.getSession();
+
+  if (!session) {
+    return;
+  }
+
+  const { data, error } =
+    await db.functions.invoke(
+      'get-admin-payments'
+    );
+
+  if (!error && data?.success) {
+    window.location.href = 'admin.html';
+  }
+
+})();
+
+
+// Allow Enter key to submit the login.
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    login();
+  }
+});
+
+</script>
+
+</body>
+</html>
