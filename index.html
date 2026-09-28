@@ -70,15 +70,24 @@ nav {
   gap: 32px;
 }
 
-nav a {
+  
+  nav a {
   color: #e7ecf2;
   text-decoration: none;
   font-size: 13px;
   font-weight: 600;
   transition: color .2s ease;
 }
-
-nav a:hover {
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: 0;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+  nav a:hover {
   color: #d6a84b;
 }
 
@@ -520,10 +529,34 @@ footer {
     font-size: 23px;
   }
 
-  nav {
-    display: none;
-  }
+  .menu-toggle {
+  display: block;
+}
 
+nav {
+  display: none;
+  position: absolute;
+  top: 68px;
+  left: 0;
+  right: 0;
+  background: #07182d;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 12px 5% 20px;
+  z-index: 1000;
+  box-shadow: 0 10px 20px rgba(0,0,0,.18);
+}
+
+nav.open {
+  display: flex;
+}
+
+nav a {
+  padding: 14px 4px;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  font-size: 14px;
+}
   .hero {
     min-height: 600px;
     padding: 65px 6%;
@@ -1290,6 +1323,17 @@ if (emailError) {
 const SUPABASE_URL = 'https://pkdleiskrqxbouozmquo.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_WtjKwXyzGuXL1xjpAwFCxw_F97Ul5W8';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+function toggleMenu() {
+  const nav = document.querySelector('header nav');
+  nav.classList.toggle('open');
+}
+
+document.querySelectorAll('header nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('header nav').classList.remove('open');
+  });
+});
+
 </script>
 </body>
 </html>
