@@ -189,8 +189,9 @@ const response = await fetch(
 );
 
 const functionData = await response.json();
-
-if (!response.ok || !functionData?.success || !functionData?.project) {
+console.log('CONTRACTOR PROJECT DATA:', functionData);
+  
+  if (!response.ok || !functionData?.success || !functionData?.project) {
   projectDetails.innerHTML = `
     <h2>This project is no longer available.</h2>
     <p style="margin-top:10px;">
