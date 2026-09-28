@@ -284,7 +284,30 @@ function goToProjectConfirmation() {
       alert(data?.error || "Unable to select this proposal.");
       return;
     }
+try {
+  const { error: contractorNotificationError } = await db.functions.invoke(
+    "notify-contractor-selected",
+    {
+      body: {
+        projectId: Number(projectId),
+        proposalId: Number(proposalId),
+        accessToken: accessToken
+      }
+    }
+  );
 
+  if (contractorNotificationError) {
+    console.error(
+      "Unable to notify selected contractor:",
+      contractorNotificationError
+    );
+  }
+} catch (notificationError) {
+  console.error(
+    "Unable to notify selected contractor:",
+    notificationError
+  );
+}
     alert("Proposal selected successfully!");
     window.location.href = `project-confirmation.html?id=${projectId}&token=${encodeURIComponent(accessToken)}`;
     
