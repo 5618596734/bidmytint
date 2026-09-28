@@ -189,7 +189,7 @@ const response = await fetch(
 );
 
 const functionData = await response.json();
-console.log('CONTRACTOR PROJECT DATA:', functionData);
+
   
   if (!response.ok || !functionData?.success || !functionData?.project) {
   projectDetails.innerHTML = `
@@ -203,6 +203,7 @@ console.log('CONTRACTOR PROJECT DATA:', functionData);
 
 const data = functionData.project;
 const existingProposal = functionData.existingProposal;
+const isAwarded = functionData.isAwarded === true;
   projectDetails.innerHTML = `
     <div class="detail-row">
       <div class="detail-label">Project Number</div>
@@ -323,6 +324,7 @@ ${existingProposal ? `
   <button type="button" onclick="showProposalForm()">Submit Sealed Proposal</button>
 `}
 `;
+return { isAwarded };
 }
 
 function showProposalForm() {
@@ -527,9 +529,11 @@ if (notificationError) {
     const params = new URLSearchParams(window.location.search);
   const projectId = params.get('id');
 
-  if (projectId && projectLoaded !== false) {
-  
-}
+    if (projectId && projectLoaded !== false) {
+  if (projectLoaded?.isAwarded) {
+    loadAwardedCustomerContact(projectId);
+  }
+}  
   });
 </script>
 </body>
