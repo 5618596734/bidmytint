@@ -339,7 +339,15 @@ button:hover {
 
       <label for="password">Create Password</label>
       <input type="password" id="password" minlength="6" placeholder="Create a secure password">
-
+      <label style="display:flex; align-items:flex-start; gap:10px; margin-top:20px; font-weight:400; line-height:1.5;">
+  <input type="checkbox" id="contractorConsent" style="width:auto; margin-top:3px;">
+  <span>
+    I agree to the
+    <a href="terms.html" target="_blank" style="color:#9a711f; font-weight:700;">BidMyTint Terms of Service</a>
+    and acknowledge the
+    <a href="privacy.html" target="_blank" style="color:#9a711f; font-weight:700;">Privacy Policy</a>.
+  </span>
+</label>
       <button type="button" onclick="submitContractorApplication()">
         Submit Contractor Application →
       </button>
@@ -366,14 +374,18 @@ button:hover {
   const serviceArea = document.getElementById('serviceArea').value.trim();
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
+  const contractorConsent = document.getElementById('contractorConsent').checked;
   const message = document.getElementById('message');
 
   if (!companyName || !phone || !serviceArea || !email || !password) {
     message.textContent = 'Please complete all fields.';
     return;
   }
-
-  message.textContent = 'Creating your contractor account...';
+if (!contractorConsent) {
+  message.textContent = 'Please agree to the Terms of Service and Privacy Policy.';
+  return;
+}
+    message.textContent = 'Creating your contractor account...';
 
   const { data, error } = await db.auth.signUp({
     email: email,
