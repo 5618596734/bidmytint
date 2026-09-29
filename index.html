@@ -641,8 +641,8 @@ nav a {
     <a href="#how">How It Works</a>
     <a href="#compare">Why BidMyTint</a>
     <a href="#about">About</a>
-    <a href="contractor-signup.html">For Contractors</a>
-    <a href="contractor-login.html">Contractor Sign In</a>
+    <a href="contractor-signup.html">For Professionals</a>
+    <a href="contractor-login.html">Professional Sign In</a>
     <a href="admin-login.html">Admin Login</a>
   </nav>
 </header>
@@ -711,7 +711,7 @@ nav a {
       <div class="number">2</div>
       <h3>Professionals Review It</h3>
       <p>
-        Qualified window film contractors serving your area
+        Qualified window film professionals serving your area
         privately review the project information.
       </p>
     </div>
@@ -838,7 +838,7 @@ nav a {
       margin-bottom:30px;
     ">
       Our goal is to give homeowners and businesses a more convenient and
-      transparent way to compare options — while allowing contractors to
+      transparent way to compare options — while allowing window film professionals to
       compete based on price, products, warranty, experience, and the
       overall solution they provide.
     </p>
@@ -853,7 +853,7 @@ nav a {
       font-weight:700;
       line-height:1.5;
     ">
-      You shouldn't have to chase contractors.
+      You shouldn't have to search for the right window film company.
       Let qualified professionals come to you.
     </div>
 
@@ -898,8 +898,8 @@ nav a {
       max-width:650px;
       margin:0 auto 26px;
     ">
-      Have a question about your project, proposals, contractor account,
-      or using BidMyTint? We're here to help.
+     Have a question about your project, proposals, professional account,
+     or using BidMyTint? We're here to help.
     </p>
 
     <div style="
@@ -958,7 +958,7 @@ nav a {
     margin-bottom:14px;
     letter-spacing:-.5px;
   ">
-    Ready to Find the Right Window Film Contractor?
+    Ready to Find the Right Window Film Professional?
   </h2>
 
   <p style="
@@ -1026,7 +1026,7 @@ Answer a few simple questions, provide approximate measurements, and upload phot
 <div class="field">
 <label>Project Address</label>
 <input id="projectAddress" type="text" autocomplete="street-address" placeholder="Street address">
-<small style="display:block; margin-top:6px; color:#6b7280;">Kept private from contractors until the Project Confirmation Payment is completed.</small>
+<small style="display:block; margin-top:6px; color:#6b7280;">Kept private from window film professionals until the Project Confirmation Payment is completed.</small>
 </div>
 
 <div class="field">
@@ -1161,8 +1161,8 @@ so professionals can evaluate access.
 <strong>Existing Film Notice:</strong>
 If existing film must be removed before installation, removal may result
 in additional charges. If existing film is discovered during inspection
-or installation, the contractor may provide an additional removal charge
-before proceeding.
+or installation, the window film professional may provide an additional removal charge
+  before proceeding.
 </div>
 
 <div class="field">
@@ -1387,8 +1387,7 @@ if (contractorNotificationError) {
     'Unable to notify contractors:',
     contractorNotificationError
   );
-}
-  
+}  
   alert("Success! Your BidMyTint project has been submitted.");
 const { error: emailError } = await db.functions.invoke('send-project-link', {
   body: {
