@@ -1141,8 +1141,24 @@ For the best proposal, include a full photo of the window or glass wall
 and a closer photo. For high windows, include the floor or ground area
 so professionals can evaluate access.
 </div>
-
 <div class="field">
+  <label>What level of window film are you looking for?</label>
+
+  <select id="filmGrade">
+    <option value="">Select film grade</option>
+    <option value="Standard">Standard — Good everyday performance</option>
+    <option value="Mid-Level">Mid-Level — Higher performance and comfort</option>
+    <option value="Premium">Premium — Maximum performance and premium technology</option>
+    <option value="Not Sure">Not sure — Let professionals recommend</option>
+  </select>
+
+  <small style="display:block; margin-top:7px; color:#6b7280; line-height:1.5;">
+    Film grade helps professionals understand the level of performance you expect.
+    The actual manufacturer, product, specifications and warranty will be included
+    in each professional's proposal.
+  </small>
+</div>
+  <div class="field">
 <label>Is there existing window film?</label>
 
 <select id="existingFilm">
@@ -1287,6 +1303,7 @@ let summary=`
 <strong>City:</strong> ${city}<br>
 <strong>ZIP Code:</strong> ${zip}<br>
 <strong>Project Goals:</strong> ${goals.length ? goals.join(", ") : "Not specified"}<br>
+<strong>Film Grade:</strong> ${document.getElementById("filmGrade").value || "Not specified"}<br>
 <strong>Windows:</strong> ${document.getElementById("windows").value}<br>
 <strong>High Windows:</strong> ${document.getElementById("highWindows").value}<br>
 <strong>Highest Window:</strong> ${document.getElementById("height").value}<br>
@@ -1344,6 +1361,7 @@ const { error: uploadError } = await db.storage
       city: document.getElementById("city").value.trim(),
       zip_code: document.getElementById("zip").value.trim(),
       goals: selectedGoals,
+      film_grade: document.getElementById("filmGrade").value,
       window_count: document.getElementById("windows").value,
       high_windows: document.getElementById("highWindows").value,
       window_height: document.getElementById("height").value,
