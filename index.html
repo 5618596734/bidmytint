@@ -1195,8 +1195,32 @@ in additional charges. If existing film is discovered during inspection
 or installation, the window film professional may provide an additional removal charge
   before proceeding.
 </div>
+<div class="field">
+  <label>Window Access & Preparation</label>
+  <small style="display:block; margin-bottom:10px; color:#6b7280; line-height:1.5;">
+    Select anything professionals should consider when pricing your project.
+  </small>
+  <div class="options">
+    <label class="option"><input type="checkbox" name="access" value="Furniture needs to be moved">Furniture will need to be moved</label>
+    <label class="option"><input type="checkbox" name="access" value="Blinds or shades need to be removed">Blinds or shades will need to be removed</label>
+    <label class="option"><input type="checkbox" name="access" value="Curtains or drapes need to be moved">Curtains or drapes will need to be moved or removed</label>
+    <label class="option"><input type="checkbox" name="access" value="Large or heavy items near windows">Large or heavy items are near the windows</label>
+    <label class="option"><input type="checkbox" name="access" value="Difficult to reach windows">Some windows are difficult to reach</label>
+    <label class="option"><input type="checkbox" name="access" value="Windows easily accessible">Windows are easily accessible</label>
+    <label class="option"><input type="checkbox" name="access" value="Not sure">I'm not sure</label>
+  </div>
+</div>
 
 <div class="field">
+  <label>Who will prepare the area before installation?</label>
+  <select id="areaPreparation">
+    <option value="">Select one</option>
+    <option value="Customer will prepare area">I will move or remove necessary items before installation</option>
+    <option value="Professional should include preparation">Professional may need to handle preparation — include it in the proposal</option>
+    <option value="Not sure">I'm not sure</option>
+  </select>
+</div>
+  <div class="field">
 <label>When would you like the project completed?</label>
 
 <select id="timing">
@@ -1320,6 +1344,10 @@ let summary=`
 <strong>Project Goals:</strong> ${goals.length ? goals.join(", ") : "Not specified"}<br>
 <strong>Film Grade:</strong> ${document.getElementById("filmGrade").value || "Not specified"}<br>
 <strong>Appearance Preference:</strong> ${document.getElementById("appearancePreference").value || "Not specified"}<br>
+<strong>Window Access:</strong> ${Array.from(document.querySelectorAll('input[name="access"]:checked')).map(item => item.value).join(", ") || "Not specified"}<br>
+<strong>Area Preparation:</strong> ${document.getElementById("areaPreparation").value || "Not specified"}<br>
+access_conditions: selectedAccess,
+area_preparation: document.getElementById("areaPreparation").value,
 <strong>Windows:</strong> ${document.getElementById("windows").value}<br>
 <strong>High Windows:</strong> ${document.getElementById("highWindows").value}<br>
 <strong>Highest Window:</strong> ${document.getElementById("height").value}<br>
@@ -1338,6 +1366,7 @@ let email=document.getElementById("email").value;
 let phone=document.getElementById("phone").value;
 let consent=document.getElementById("consent").checked;
 let selectedGoals = Array.from(document.querySelectorAll('input[name="goal"]:checked')).map(item => item.value).join(", ");if(!name || !email || !phone){
+let selectedAccess = Array.from(document.querySelectorAll('input[name="access"]:checked')).map(item => item.value).join(", ");
 alert("Please enter your name, email and mobile number.");
 return;
 }
