@@ -1159,6 +1159,21 @@ so professionals can evaluate access.
   </small>
 </div>
   <div class="field">
+  <label>What appearance do you prefer?</label>
+
+  <select id="appearancePreference">
+    <option value="">Select appearance preference</option>
+    <option value="Light / Natural">Light / Natural — Keep the glass looking as natural as possible</option>
+    <option value="Medium">Medium — Balanced appearance and privacy</option>
+    <option value="Dark / Maximum Privacy">Dark / Maximum Privacy — Darker appearance with more daytime privacy</option>
+    <option value="Not Sure">Not sure — Let professionals recommend</option>
+  </select>
+
+  <small style="display:block; margin-top:7px; color:#6b7280; line-height:1.5;">
+    Your preference helps professionals recommend film options that match the look you want.
+  </small>
+</div>
+  <div class="field">
 <label>Is there existing window film?</label>
 
 <select id="existingFilm">
@@ -1304,6 +1319,7 @@ let summary=`
 <strong>ZIP Code:</strong> ${zip}<br>
 <strong>Project Goals:</strong> ${goals.length ? goals.join(", ") : "Not specified"}<br>
 <strong>Film Grade:</strong> ${document.getElementById("filmGrade").value || "Not specified"}<br>
+<strong>Appearance Preference:</strong> ${document.getElementById("appearancePreference").value || "Not specified"}<br>
 <strong>Windows:</strong> ${document.getElementById("windows").value}<br>
 <strong>High Windows:</strong> ${document.getElementById("highWindows").value}<br>
 <strong>Highest Window:</strong> ${document.getElementById("height").value}<br>
@@ -1362,6 +1378,7 @@ const { error: uploadError } = await db.storage
       zip_code: document.getElementById("zip").value.trim(),
       goals: selectedGoals,
       film_grade: document.getElementById("filmGrade").value,
+      appearance_preference: document.getElementById("appearancePreference").value,
       window_count: document.getElementById("windows").value,
       high_windows: document.getElementById("highWindows").value,
       window_height: document.getElementById("height").value,
