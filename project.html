@@ -316,6 +316,22 @@ ${existingProposal ? `
     </div>
 
     <div class="detail-row">
+      
+<div class="detail-row">
+  <div class="detail-label">Heat Rejection (TSER %)</div>
+  <input id="filmTSER" type="number" min="0" max="100" step="0.1" placeholder="Example: 65">
+</div>
+
+<div class="detail-row">
+  <div class="detail-label">UV Rejection (%)</div>
+  <input id="filmUV" type="number" min="0" max="100" step="0.1" placeholder="Example: 99">
+</div>
+
+<div class="detail-row">
+  <div class="detail-label">Visible Light Transmission (VLT %)</div>
+  <input id="filmVLT" type="number" min="0" max="100" step="0.1" placeholder="Example: 35">
+</div>
+      
       <div class="detail-label">Warranty</div>
       <div class="detail-value">${escapeHtml(existingProposal.warranty || 'Not provided')}</div>
     </div>
@@ -412,6 +428,10 @@ if (contractor.status !== 'approved') {
   const price = document.getElementById('proposalPrice').value;
   const manufacturer = document.getElementById('filmManufacturer').value;
   const product = document.getElementById('filmProduct').value;
+  
+const filmTSER = document.getElementById('filmTSER').value;
+const filmUV = document.getElementById('filmUV').value;
+const filmVLT = document.getElementById('filmVLT').value;
   const warrantyValue = document.getElementById('warranty').value;
   const availabilityValue = document.getElementById('availability').value;
   const notes = document.getElementById('proposalNotes').value;
@@ -430,6 +450,11 @@ const { data: submitResult, error: submitError } = await db.functions.invoke(
       proposalPrice: Number(price),
       filmManufacturer: manufacturer,
       filmProduct: product,
+      
+filmTSER: filmTSER === '' ? null : Number(filmTSER),
+filmUV: filmUV === '' ? null : Number(filmUV),
+filmVLT: filmVLT === '' ? null : Number(filmVLT),
+
       warranty: warrantyValue,
       availability: availabilityValue,
       proposalNotes: notes
