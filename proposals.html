@@ -213,6 +213,20 @@ document.getElementById('proposalsList').innerHTML = proposals.map(proposal => `
         <div class="detail-value">${proposal.film_product || 'Not provided'}</div>
       </div>
 
+<div>
+  <div class="detail-label">Heat Rejection (TSER)</div>
+  <div class="detail-value">${proposal.film_tser != null ? proposal.film_tser + '%' : 'Not provided'}</div>
+</div>
+
+<div>
+  <div class="detail-label">UV Rejection</div>
+  <div class="detail-value">${proposal.film_uv != null ? proposal.film_uv + '%' : 'Not provided'}</div>
+</div>
+
+<div>
+  <div class="detail-label">Visible Light Transmission (VLT)</div>
+  <div class="detail-value">${proposal.film_vlt != null ? proposal.film_vlt + '%' : 'Not provided'}</div>
+</div>
       <div>
         <div class="detail-label">Warranty</div>
         <div class="detail-value">${proposal.warranty || 'Not provided'}</div>
