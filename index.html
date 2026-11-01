@@ -489,7 +489,69 @@ textarea {
   margin-bottom: 25px;
 }
 
-/* =========================
+/* WINDOW FILM GRADE CARDS */
+
+.film-grade-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 15px;
+}
+
+.film-grade-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 22px;
+  border: 2px solid #e1e5ea;
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.film-grade-card:hover {
+  border-color: #d6a84b;
+  background: #fffdf7;
+}
+
+.film-grade-card:has(input:checked) {
+  border-color: #d6a84b;
+  background: #fff9e9;
+  box-shadow: 0 5px 18px rgba(214,168,75,.15);
+}
+
+.film-grade-card input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #d6a84b;
+}
+
+.film-grade-card strong {
+  font-size: 20px;
+  color: #07182d;
+}
+
+.film-grade-card span {
+  font-size: 14px;
+  font-weight: 700;
+  color: #b18435;
+}
+
+.film-grade-card small {
+  font-size: 13px;
+  color: #697585;
+  line-height: 1.5;
+}
+
+@media (max-width: 650px) {
+  .film-grade-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+    /* =========================
    FOOTER
 ========================= */
 
@@ -1148,22 +1210,60 @@ For the best proposal, include a full photo of the window or glass wall
 and a closer photo. For high windows, include the floor or ground area
 so professionals can evaluate access.
 </div>
+
 <div class="field">
-  <label>What level of window film are you looking for?</label>
+  <label>Choose Your Window Film Grade</label>
+  <p style="color:#697585; margin-bottom:18px; font-size:14px;">
+    Select your preferred performance level. Not sure?
+    Let professionals recommend the best option.
+  </p>
 
-  <select id="filmGrade">
-    <option value="">Select film grade</option>
-    <option value="Standard">Standard — Good everyday performance</option>
-    <option value="Mid-Level">Mid-Level — Higher performance and comfort</option>
-    <option value="Premium">Premium — Maximum performance and premium technology</option>
-    <option value="Not Sure">Not sure — Let professionals recommend</option>
-  </select>
+  <div class="film-grade-grid">
 
-  <small style="display:block; margin-top:7px; color:#6b7280; line-height:1.5;">
-    Film grade helps professionals understand the level of performance you expect.
-    The actual manufacturer, product, specifications and warranty will be included
-    in each professional's proposal.
-  </small>
+    <label class="film-grade-card">
+      <input type="radio" name="filmGradeChoice" value="Standard">
+      <strong>Standard</strong>
+      <span>Essential Protection</span>
+      <small>Basic heat and glare reduction</small>
+      <small>UV protection</small>
+      <small>Budget-friendly option</small>
+    </label>
+
+    <label class="film-grade-card">
+      <input type="radio" name="filmGradeChoice" value="Mid-Level">
+      <strong>Mid-Grade</strong>
+      <span>Enhanced Performance</span>
+      <small>Improved heat rejection</small>
+      <small>Better interior comfort</small>
+      <small>Balanced value and performance</small>
+    </label>
+
+    <label class="film-grade-card">
+      <input type="radio" name="filmGradeChoice" value="Premium">
+      <strong>Premium</strong>
+      <span>High Performance</span>
+      <small>Advanced heat rejection options</small>
+      <small>Premium film technology</small>
+      <small>Enhanced comfort and clarity</small>
+    </label>
+
+    <label class="film-grade-card">
+      <input type="radio" name="filmGradeChoice" value="Not Sure">
+      <strong>Not Sure?</strong>
+      <span>Help Me Choose</span>
+      <small>Let professionals recommend</small>
+      <small>Compare suitable products</small>
+      <small>Find the right solution</small>
+    </label>
+
+  </div>
+
+  <input type="hidden" id="filmGrade" value="">
+
+  <p style="font-size:12px; color:#697585; margin-top:15px;">
+    Actual performance varies by manufacturer and product.
+    Professionals will provide product specifications and warranty details.
+  </p>
 </div>
   <div class="field">
   <label>What appearance do you prefer?</label>
@@ -1325,9 +1425,25 @@ document.getElementById("step"+number).classList.add("active");
 window.scrollTo(0,0);
 }
 
+/* Connect film grade cards to project form */
+
+document.querySelectorAll('input[name="filmGradeChoice"]').forEach(function(radio) {
+  radio.addEventListener('change', function() {
+    document.getElementById('filmGrade').value = this.value;
+  });
+});
+
 function reviewProject(){
 
-let property=document.getElementById("property").value;
+const selectedFilmGrade = document.getElementById("filmGrade").value;
+
+if (!selectedFilmGrade) {
+  alert("Please select a window film grade or choose Not Sure.");
+  showStep(2);
+  return;
+}
+
+  let property=document.getElementById("property").value;
 let projectAddress=document.getElementById("projectAddress").value.trim();
 let city=document.getElementById("city").value.trim();
 let zip=document.getElementById("zip").value.trim();
@@ -1353,8 +1469,7 @@ let summary=`
 <strong>Appearance Preference:</strong> ${document.getElementById("appearancePreference").value || "Not specified"}<br>
 <strong>Window Access:</strong> ${Array.from(document.querySelectorAll('input[name="access"]:checked')).map(item => item.value).join(", ") || "Not specified"}<br>
 <strong>Area Preparation:</strong> ${document.getElementById("areaPreparation").value || "Not specified"}<br>
-access_conditions: selectedAccess,
-area_preparation: document.getElementById("areaPreparation").value,
+
 <strong>Windows:</strong> ${document.getElementById("windows").value}<br>
 <strong>High Windows:</strong> ${document.getElementById("highWindows").value}<br>
 <strong>Highest Window:</strong> ${document.getElementById("height").value}<br>
@@ -1372,10 +1487,18 @@ let name=document.getElementById("name").value;
 let email=document.getElementById("email").value;
 let phone=document.getElementById("phone").value;
 let consent=document.getElementById("consent").checked;
-let selectedGoals = Array.from(document.querySelectorAll('input[name="goal"]:checked')).map(item => item.value).join(", ");if(!name || !email || !phone){
-let selectedAccess = Array.from(document.querySelectorAll('input[name="access"]:checked')).map(item => item.value).join(", ");
-alert("Please enter your name, email and mobile number.");
-return;
+
+let selectedGoals = Array.from(
+  document.querySelectorAll('input[name="goal"]:checked')
+).map(item => item.value).join(", ");
+
+let selectedAccess = Array.from(
+  document.querySelectorAll('input[name="access"]:checked')
+).map(item => item.value).join(", ");
+
+if (!name || !email || !phone) {
+  alert("Please enter your name, email and mobile number.");
+  return;
 }
 
 if(!consent){
