@@ -231,6 +231,16 @@ const isAwarded = functionData.isAwarded === true;
       <div class="detail-value">${escapeHtml(data.goals || 'Not provided')}</div>
     </div>
 
+<div class="detail-row">
+  <div class="detail-label">Requested Film Grade</div>
+  <div class="detail-value">${escapeHtml(data.film_grade || 'Not specified')}</div>
+</div>
+
+<div class="detail-row">
+  <div class="detail-label">Appearance Preference</div>
+  <div class="detail-value">${escapeHtml(data.appearance_preference || 'Not specified')}</div>
+</div>
+
     <div class="detail-row">
       <div class="detail-label">Number of Windows</div>
       <div class="detail-value">${escapeHtml(data.window_count || 'Not provided')}</div>
